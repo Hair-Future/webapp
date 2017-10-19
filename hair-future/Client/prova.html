@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <link rel="stylesheet" href="/resources/demos/style.css">
+    <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/page_style.css">
+    <title>prova</title>
+
+</head>
+<body>
+<div id="accordion"> </div>
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+            testo = "";
+
+            for (i = 0; i < 5; i++) {
+                testo = testo + "<h3>Categoria " + i + "</h3>";
+
+                for (j = 0; j < 2; i++) {
+                    testo = testo + "<div><ul><li>Servizio " + j + "</li></ul></div>";
+                }
+            }
+            console.log(testo);
+
+            $('#accordion').append(testo).accordion('destroy')
+                .accordion();
+        })
+
+    </script>
+
+    <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+</body>
+</html>

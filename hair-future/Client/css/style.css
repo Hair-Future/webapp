@@ -1,0 +1,157 @@
+.icon {margin-right: 2px;}
+
+#iscriviti
+{
+    float:left;
+}
+
+.form-control:focus {
+    border-color: #a311e3;
+    outline: 0;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(163, 17, 227, 0.6);
+    box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(163, 17, 227, 0.6);}
+
+.navbar-default{
+    background-color: rgba(248,248,248,0.85) !important;
+}
+.navbar-header{
+    height: 50px;
+}
+
+.navbar-fixed-top{
+    border-width: 0px 0px 0px;
+}
+
+.navbar-right{
+    padding-right: 0,3%;
+}
+
+.navbar-brand{
+    height: 50px;
+    padding: 12px 15px;
+}
+
+.navbar-nav>li>a{
+    height: 50px;
+    line-height: 23px;
+    text-align: center;
+    color: rgba(44,62,80,0.99) !important;
+}
+
+#btn-nav.active{
+    height: 51px;
+    background-color: rgba(134,73,169,0.85);
+    color: #ffffff ;
+    border-color: transparent;
+    border-radius: 0px;
+    padding: 15px 12px;
+    box-shadow: none;
+}
+#btn-nav:hover{
+    background-color: rgba(102,64,133,0.85);
+}
+
+.navbar-toggle{
+    margin-top: 18px;
+    border-color: transparent !important;
+}
+
+#myModalLabel, #myModalLabel2{
+    text-align: center;
+}
+
+.modal-body{
+    padding: 30px;
+}
+
+.btn-colored{
+    background-color: #8649a9;
+    color: white;
+    border-color: transparent;
+}
+#carousel-example-generic{
+    padding-top: 0px;
+}
+.carousel-inner>.item{
+    min-height: 550px;
+    background-size: cover;
+    background-position: center center;
+}
+
+.text-slider{
+    font-size: 250%;
+    font-family: Helvetica Neue,Helvetica,Arial,sans-serif;
+    text-shadow: 0px 1px 1px rgb(0,0,0,0.2);
+}
+#text-slider-social{
+    color: #777777;
+}
+.carousel-caption{
+    right: -31%;
+    left: 31%;
+    bottom: 40%;
+    text-align: center;
+}
+
+.contenuto{
+    min-height: 400px;
+}
+.footer{
+    min-height: 100px;
+    background-color: #262626;
+}
+
+/*--------------------------
+       Animate CSS
+------------------------- */
+.animated {
+    animation-duration: 2s;
+    animation-fill-mode: both;
+}
+
+.animated.infinite {
+    animation-iteration-count: infinite;
+}
+
+.animated.hinge {
+    animation-duration: 2s;
+}
+
+.animated.flipOutX,
+.animated.flipOutY,
+.animated.bounceIn,
+.animated.bounceOut {
+    animation-duration: .75s;
+}
+
+@keyframes fadeInRight {
+    from {
+        opacity: 0;
+        transform: translate3d(100%, 0, 0);
+    }
+
+    to {
+        opacity: 1;
+        transform: none;
+    }
+}
+
+.fadeInRight {
+    animation-name: fadeInRight;
+}
+
+@keyframes slideInDown {
+    from {
+        transform: translate3d(0, -100%, 0);
+        visibility: visible;
+    }
+
+    to {
+        transform: translate3d(0, 0, 0);
+    }
+}
+
+.slideInDown {
+    animation-name: slideInDown;
+}
+

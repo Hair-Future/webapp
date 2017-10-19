@@ -1,0 +1,14 @@
+.sfondo{
+    background: url("../img/sfondo_registrazione1.png");
+    background-size:     cover;                      /* <------ */
+    background-repeat:   no-repeat;
+    background-position: center center;  }
+
+.column
+{
+    display: inline;
+}
+.form_input
+{
+    margin-top: 80px;
+}

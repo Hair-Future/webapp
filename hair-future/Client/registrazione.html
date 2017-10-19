@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/page_style.css">
+    <link rel="stylesheet" href="css/registrazione_style.css">
+
+</head>
+<body class="sfondo">
+<nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="index.html">
+                <img src="img/logo.png">
+            </a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                <li><a href="#">Home</a></li>
+                <li><a href="#">News</a></li>
+                <li><a href="#">About</a></li>
+                <!--<li><a class="btn btn-default active" href="#" role="button" id="btn-nav">Prenota</a></li> -->
+                <li><button type="button" class="btn btn-default active" id="btn-nav" data-toggle="modal" data-target="#myModal">
+                    Prenota
+                </button></li>
+
+            </ul>
+
+        </div><!-- /.navbar-collapse -->
+    </div><!-- /.container-fluid -->
+</nav>
+
+    <div class="row">
+        <div class="form_input col-sm-4">
+                    <!--Nome-->
+                    <div class="form-group">
+                        <label for="nome" class="control-label"><span class="glyphicon glyphicon-user icon"></span>Nome</label>
+                        <input type="text" class="form-control " name="nome" id="nome">
+                    </div>
+                    <!--Cognome-->
+                    <div class="form-group">
+                        <label for="cognome" class="control-label"><span class="glyphicon glyphicon-user icon"></span>Cognome</label>
+                        <input type="text" class="form-control" name="cognome" id="cognome">
+                    </div>
+                    <!--Telefono-->
+                    <div class="form-group">
+                        <label for="telefono" class="control-label"><span class="glyphicon glyphicon-earphone icon"></span>Telefono</label>
+                        <input type="text" class="form-control" name="telefono" id="telefono">
+                    </div>
+                    <!--E-mail-->
+                    <div class="form-group">
+                        <label for="email" class="control-label"><span class="glyphicon glyphicon-envelope icon"></span>E-mail</label>
+                        <input type="email" class="form-control" name="email" id="email">
+                    </div>
+                    <!--Password-->
+                    <div class="form-group">
+                        <label for="pass1" class="control-label"><span class="glyphicon glyphicon-lock icon"></span>Password</label>
+                        <input type="password" class="form-control" name="password" id="pass1">
+                    </div>
+                    <!--Ripeti Password-->
+                    <div class="form-group">
+                        <label for="pass2" class="control-label"><span class="glyphicon glyphicon-lock icon"></span>Conferma password</label>
+                        <input type="password" class="form-control" id="pass2">
+                    </div>
+        </div>
+    </div>
+    <div class="row">
+
+        <button type="button" class="btn btn-default btn-colored" id="registrazione" data-dismiss="modal">Registrati</button>
+    </div>
+</body>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script src="bootstrap/js/bootstrap.min.js"></script>
+<script src="js/registrazione.js"></script>
+
+</html>
