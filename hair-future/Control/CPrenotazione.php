@@ -21,7 +21,8 @@ class CPrenotazione
         $catalogoServizi = new ECatalogoServizi();
         $durata = 0;
         $Mercurio = USingleton::getInstance('VJson');
-        $dati = $Mercurio->ricevi();
+        $data = $Mercurio->ricevi();
+        $dati = $data["dati"];
         foreach ($dati["lista"] as $item)
         {
             $servizio = $catalogoServizi->ottieniServizioByCodice($item);
