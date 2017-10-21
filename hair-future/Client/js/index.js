@@ -2,6 +2,8 @@
  * Created by loren on 04/10/2017.
  */
 $(document).ready(function() {
+    indirizzo='../index.php';
+
     $('#accedi').click(function () {
 
         var email = $('#email').val();
@@ -14,15 +16,24 @@ $(document).ready(function() {
         }
         else
         {
-            dati=JSON.stringify(
-                {
-                    richiesta: "login",
-                    email: email,
-                    password: password
-                });
+            var richiesta={
+                controller : "CLogin",
+                metodo: "effettuaLogin"
+            };
+
+            var dati={
+                email: email,
+                password: password
+            };
+
+
             $.post(
-                "http://10.170.54.17/hair-future/index.php",
-                dati,
+                indirizzo,
+                JSON.stringify(
+                    {
+                        richiesta: richiesta,
+                        dati:dati
+                    }),
                 function (data)
                 {
                     $(".result").html(data);
