@@ -10,8 +10,8 @@ class CPrenotazione
 {
     public function inviaTuttiServizi()
     {
-        $catalogo = new ECatalogoServizi();
-        $Mercurio = new VJson();
+        $catalogo = USingleton::getInstance('ECatalogoServizi');
+        $Mercurio = USingleton::getInstance('VJson');
         $dati = $catalogo->getListaCategorie();
         $Mercurio->invia($dati);
     }
@@ -20,7 +20,7 @@ class CPrenotazione
     {
         $catalogoServizi = new ECatalogoServizi();
         $durata = 0;
-        $Mercurio = new VJson();
+        $Mercurio = USingleton::getInstance('VJson');
         $dati = $Mercurio->ricevi();
         foreach ($dati["lista"] as $item)
         {

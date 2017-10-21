@@ -85,5 +85,30 @@ class EGestoreUtenti
             return -1;
     }
 
+    public static function autenticaUtente($email, $password)
+    {
+        $Caronte = new FUtente();
+        $result = $Caronte->searchByEmailPassword($email, $password);
+        if ($result['tipo'] == 'Cliente')
+        {
+            $Cliente = new ECliente();
+            $Cliente->loadByID($result);
+            return $Cliente;
+        }
+        elseif ($result['tipo'] == 'Dipendente')
+        {
+            $Dipendente = new EDipendente();
+            $Dipendente->loadByID($result);
+            return $Dipendente;
+        }
+        elseif ($result['tipo'] == 'Direttore')
+        {
+            $Direttore = new EDirettore();
+            $Direttore->loadByID($result);
+            return $Direttore;
+        }
+        else
+            return -1;
+    }
 
 }

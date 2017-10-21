@@ -7,9 +7,6 @@
  * Time: 15:39
  */
 
-$session=new CSession();
-$session->Session();
-
 class FrontController
 {
     private $controller = null;
@@ -19,7 +16,7 @@ class FrontController
 
     public function __construct()
     {
-        $this->json = new VJson();
+        $this->json = USingleton::getInstance('VJson');
         $this->parseUri();
     }
 

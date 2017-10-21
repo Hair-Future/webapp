@@ -48,6 +48,14 @@ class FUtente extends FDb
         return $result;
     }
 
+    public function searchByEmailPassword($email, $password)
+    {
+        $this->sql = $this->con->prepare("SELECT *
+                      FROM Utente
+                      WHERE email=? AND password=?;");
+        $result= parent::searchById(array($email, $password));
+        return $result;
+    }
     /**
      * @param $nome
      * @param $cognome

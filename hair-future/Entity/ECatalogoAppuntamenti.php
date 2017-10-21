@@ -132,7 +132,7 @@ class ECatalogoAppuntamenti
      *
      * metodo che riceve una data in formato 'Y-m-d', e l'ora in formato 'H:i:s'
      */
-    public function controllaPossibilitàPrenotazione($data, $ora, $listaServizi)
+    public function controllaPossibilitaPrenotazione($data, $ora, $listaServizi)
     {
         $startTime = strtotime($data." ".$ora);
         $durata = 0;
