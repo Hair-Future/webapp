@@ -29,9 +29,9 @@ class CPrenotazione
             $durata += $servizio->getDurata();
         }
         $dati = null;
-        $dati[] = $durata;
+        $dati['durata'] = $durata;
         $catalogoAppuntamenti = new ECatalogoAppuntamenti();
-        $dati[] = $catalogoAppuntamenti->ottieniIntervalliOccupati(7);
+        $dati['intervalli'] = $catalogoAppuntamenti->ottieniIntervalliOccupati(7);
         $Mercurio->invia($dati);
     }
 }
