@@ -16,19 +16,6 @@ $(document).ready(function()
         var pass1 = $('#pass1').val();
         var pass2 = $('#pass2').val();
 
-        var richiesta={
-            controller : "CRegistrazione",
-            metodo: "Registra"
-        };
-
-        var dati={
-            nome : nome,
-            cognome : cognome,
-            telefono : telefono,
-            email: email,
-            password: pass1
-        };
-
 
 
         if (nome == "" || cognome == "" || telefono == "" || email == "" || pass1 == "" || pass2 == "")
@@ -38,15 +25,25 @@ $(document).ready(function()
             alert("Attenzione! Le password non corrispondono!");
         } else
             {
-            var data=JSON.stringify(
-                {
-                richiesta: richiesta,
-                dati: dati
-                }
-            )
+                var richiesta={
+                    controller : "CRegistrazione",
+                    metodo: "Registra"
+                };
+
+                var dati={
+                    nome : nome,
+                    cognome : cognome,
+                    telefono : telefono,
+                    email: email,
+                    password: pass1
+                };
+
              $.post(indirizzo,
-                 //"http://10.170.54.17/hair-future/index.php",
-                 data,
+                 JSON.stringify(
+                     {
+                         richiesta: richiesta,
+                         dati: dati
+                     }),
                  function (risultato) {
                      $(".result").html(risultato);
                      alert(risultato.nome);

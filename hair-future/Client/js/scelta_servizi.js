@@ -2,8 +2,9 @@
  * Created by loren on 05/10/2017.
  */
 $(document).ready(function() {
-    indirizzo='http://localhost/hair-future/Server_side/index.php';
-        //'http://10.170.13.186/hair-future/index.php';
+
+    indirizzo='../index.php';
+
 
         //inizializzazione accordion
         $( "#accordion" ).accordion({
@@ -26,26 +27,34 @@ $(document).ready(function() {
          */
 
         //richiesta al server dei servizi disponibili sul db
+
+        var richiesta=
+            {
+                controller : "CPrenotazione",
+                metodo: "inviaTuttiServizi"
+            }
         $.post(indirizzo,
-            //"http://localhost/hair-future/Server_side/index.php",
-            //"http://172.27.24.147/hair-future/index.php",
-            JSON.stringify(
-                {
-                    richiesta: "sceltaServizi"
-                }),
+            JSON.stringify({richiesta: richiesta}),
             function (data) {
                 $(".result").html(data);
                 testo="";
 
+
                 for (i in data)
                 {
-                    testo=testo+"<h3>"+data[i].nome+"</h3><div>"
+                    testo=testo+"<h3>"+data[i].nome+"</h3><div>";
                     for(j in data[i].servizi)
-
-                        testo=testo+'<li> <input class="check" type="checkbox" name="servizio" value="'+data[i].servizi[j].codice+'"/> '+data[i].servizi[j].nome+'</li>';
+                    {
+                        testo = testo +
+                            '<li>' +
+                            '<input class="check" type="checkbox" name="servizio" value="' + data[i].servizi[j].codice + '">' +
+                            data[i].servizi[j].nome +
+                            '<span id="prezzo" >'+data[i].servizi[j].codice+'€</span></li>';
+                    }
                     // console.log(data[i].nome+": "+data[i].servizi[j].nome);
                     testo=testo+"</div>";
                 }
+
 
                 $('#accordion').append(testo)
                     .accordion('destroy').accordion
@@ -68,68 +77,35 @@ $(document).ready(function() {
     //invio al server della lista dei servizi per calcolo durata e orari disponibili
     $('#inviaServizi').click(function ()
     {
-        lista=new Array();
+        var listaServizi={};
         i=0;
         $("input[name=servizio]").each(function () {
             var ischecked = $(this).is(":checked");
             if (ischecked) {
-                lista[i] = $(this).val();
-                console.log(lista[i]);
+                listaServizi[i] = parseInt($(this).val(), 10);
                 i++;
             }
         });
+       // console.log(listaServizi);
+
+
+        var richiesta= {
+            controller: "CPrenotazione",
+            metodo: "inviaDurataListaServizi"
+        };
 
         $.post(indirizzo,
-            //http://localhost/hair-future/Server_side/index.php,
-            //"http://172.27.24.147/hair-future/index.php",
             JSON.stringify(
                 {
-                    richiesta: "durataListaServizi",
-                    lista: lista
+                    richiesta: richiesta,
+                    dati: {lista: listaServizi}
                 }),
             function (intervalli)
             {
-                console.log('ciao');
-                alert(intervalli)
+                console.log(intervalli);
             },
             "json"
         );
     })
-
-
-
-
-        /*
-         testo="<h3>"+data[0].nome+"</h3><ul><li>"+data[0].servizi[0].nome+"</li></ul>";
-         testo=testo+"<h3>"+data[0].nome+"</h3><ul><li>"+data[0].servizi[1].nome+"</li></ul>";
-         $('#accordion').append(testo)
-
-         .accordion('destroy').accordion();
-
-
-         $('#accordion').append("<h3>"+data[0].nome+"</h3><ul><li>"+data[0].servizi[0].nome+"</li></ul>")
-
-         .accordion('destroy').accordion();
-
-
-
-        testo="";
-
-        for (i=0; i<5; i++)
-        {
-            testo=testo+"<h3>Categoria " + i + "</h3>";
-
-            for (j = 0; j < 2; i++) {
-                testo=testo+"<div><ul><li>Servizio " + j + "</li></ul></div>";
-            }
-        }
-        console.log(testo);
-
-        $('#accordion').append(testo).accordion('destroy')
-            .accordion();
-
-            */
-
-
 
     } );

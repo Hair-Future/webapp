@@ -1,0 +1,34 @@
+#accordion
+{
+    margin-top: 80px;
+    margin-bottom: 20px;
+}
+
+.sfondo{
+    background: url("../img/sfondo_registrazione1.png");
+    background-size:     cover;                      /* <------ */
+    background-repeat:   no-repeat;
+    background-position: center center;  }
+
+
+.ui-state-active,
+.ui-widget-content .ui-state-active,
+.ui-widget-header .ui-state-active,
+a.ui-button:active,
+.ui-button:active,
+.ui-button.ui-state-active:hover {
+    border: 1px solid #8404ce;
+    background: #A311E3;
+    font-weight: normal;
+    color: #f8f8f8;
+}
+.ui-icon-background,
+.ui-state-active .ui-icon-background {
+    border: #8404ce;
+    background-color: #f8f8f8;
+}
+
+#prezzo
+{
+    float:right;
+}
