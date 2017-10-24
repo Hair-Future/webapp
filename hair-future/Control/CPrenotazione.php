@@ -30,8 +30,8 @@ class CPrenotazione
         }
         $dati = null;
         $dati['durata'] = $durata;
-        $catalogoAppuntamenti = new ECatalogoAppuntamenti();
-        $dati['intervalli'] = $catalogoAppuntamenti->ottieniIntervalliOccupati(7);
+        $catalogoAppuntamenti = USingleton::getInstance('ECatalogoAppuntamenti');
+        $dati['intervalli'] = $catalogoAppuntamenti->ottieniIntervalliNonPrenotabili(7,date('Y-m-d'), $durata);
         $Mercurio->invia($dati);
     }
 }

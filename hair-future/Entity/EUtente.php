@@ -188,7 +188,7 @@ abstract class EUtente
      */
     public function prenotaAppuntamento($email, $listaServizi, $data, $ora)
     {
-        $catalogo = new ECatalogoAppuntamenti();
+        $catalogo = USingleton::getInstance('ECatalogoAppuntamenti');
         $catalogo->prenotaAppuntamento($email, $listaServizi, $data, $ora);
     }
 
@@ -200,7 +200,7 @@ abstract class EUtente
      */
     public function modificaAppuntamento($id, $data, $ora, $email)
     {
-        $catalogo = new ECatalogoAppuntamenti();
+        $catalogo = USingleton::getInstance('ECatalogoAppuntamenti');
         $catalogo->modificaAppuntamento($id, $data, $ora, $email);
     }
 
@@ -210,7 +210,7 @@ abstract class EUtente
      */
     public function cancellaAppuntamento($id, $email)
     {
-        $catalogo = new ECatalogoAppuntamenti();
+        $catalogo = USingleton::getInstance('ECatalogoAppuntamenti');
         $catalogo->cancellaAppuntamento($id, $email);
     }
 
@@ -221,7 +221,7 @@ abstract class EUtente
      */
     public function ottieniListaServizi($email)
     {
-        $catalogo = new ECatalogoAppuntamenti();
+        $catalogo = USingleton::getInstance('ECatalogoAppuntamenti');
         return $catalogo->searchAppuntamentoByUtente($email);
     }
 }

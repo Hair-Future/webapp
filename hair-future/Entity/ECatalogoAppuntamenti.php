@@ -10,16 +10,23 @@ class ECatalogoAppuntamenti
 {
     private $catalogo = [];
 
-    /**
-     * ECatalogoAppuntamenti constructor.
-     */
-    public function __construct(){
+    private function carica()
+    {
         $db = new FAppuntamento();
         $result = $db->search("CURRENT_DATE");
-        foreach ($result as $row){
+        $this->catalogo = [];
+        foreach ($result as $row)
+        {
             $appuntamento = new EAppuntamento();
             $this->catalogo[] = $appuntamento->loadByValori($row);
         }
+    }
+    /**
+     * ECatalogoAppuntamenti constructor.
+     */
+    public function __construct()
+    {
+        $this->carica();
     }
 
     /**
@@ -96,9 +103,16 @@ class ECatalogoAppuntamenti
 
     public function prenotaAppuntamento($email, $listaServizi, $data, $ora)
     {
-        $appuntamento = new EAppuntamento();
-        $appuntamento->sceltaServizi($email, $listaServizi);
-        $appuntamento->addAppuntamento($data, $ora);
+        if ($this->controllaPossibilitaPrenotazione($data,$ora,$listaServizi)==0)
+        {
+            $appuntamento = new EAppuntamento();
+            $appuntamento->sceltaServizi($email, $listaServizi);
+            $appuntamento->addAppuntamento($data, $ora);
+            $this->carica();
+            return 0;
+        }
+        else
+            return -1;
     }
 
     public function modificaAppuntamento($id, $data, $ora, $email)
@@ -109,6 +123,7 @@ class ECatalogoAppuntamenti
             if ($appuntamento->getCodice() == $id)
             {
                 $appuntamento->updateAppuntamento($data, $ora);
+                $this->carica();
                 return 0;
             }
         }
@@ -118,10 +133,16 @@ class ECatalogoAppuntamenti
     public function cancellaAppuntamento($id, $email)
     {
         $appuntamenti = $this->searchAppuntamentoByUtente($email);
-        foreach ($appuntamenti as $appuntamento) {
+        foreach ($appuntamenti as $appuntamento)
+        {
             if ($appuntamento->getCodice() == $id)
+            {
                 $appuntamento->deleteAppuntamento();
+                $this->carica();
+                return 0;
+            }
         }
+        return -1;
     }
 
     /**
@@ -159,10 +180,15 @@ class ECatalogoAppuntamenti
         return 0;
     }
 
-    public function ottieniIntervalliOccupati($numGiorni)
+    /**
+     * @param $numGiorni
+     * @param $data: date(Y-m-d)
+     * @return array
+     */
+    public function ottieniIntervalliOccupati($numGiorni, $data)
     {
         $appuntamenti = array();
-        $date = new DateTime(date('Y-m-d'));
+        $date = new DateTime($data);
         for ($i = 0; $i < $numGiorni; $i++)
         {
             $date->modify('+1 day');
@@ -179,10 +205,32 @@ class ECatalogoAppuntamenti
         $i = 0;
         foreach ($appuntamenti as $item)
         {
-            $intervalli[$item->getData()][$i]['inizioIntervallo'] = $item->getOraInizio();
-            $intervalli[$item->getData()][$i]['fineIntervallo'] = $item->getOraFine();
-            $i++;
+            $intervalli[$item->getData()][] = array('inizioIntervallo' => $item->getOraInizio(),
+            'fineIntervallo' => $item->getOraFine());
         }
         return $intervalli;
+    }
+
+    public function ottieniIntervalliNonPrenotabili($numGiorni, $data, $durataAppuntamento)
+    {
+        $intervalli = $this->ottieniIntervalliOccupati($numGiorni, $data);
+        $nonPrenotabili = array();
+        $durata = $durataAppuntamento*60;
+        //strtotime($data." ".$ora)
+        foreach ($intervalli as $giorno=>$lista)
+        {
+            $nonPrenotabili[$giorno][] = $lista[0];
+            for ($i = 1; $i < sizeof($lista); $i++)
+            {
+                $libero = strtotime($giorno." ".$lista[$i]['inizioIntervallo'])-strtotime($giorno." ".$lista[$i-1]['fineIntervallo']);
+                if ($durata > $libero)
+                {
+                    $nonPrenotabili[$giorno][] = array('inizioIntervallo'=>$lista[$i-1]['fineIntervallo'],
+                        'fineIntervallo'=>$lista[$i]['inizioIntervallo']);
+                }
+                $nonPrenotabili[$giorno][] = $lista[$i];
+            }
+        }
+        return $nonPrenotabili;
     }
 }
