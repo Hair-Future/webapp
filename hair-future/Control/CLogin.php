@@ -10,17 +10,23 @@ class CLogin
 {
     public function effettuaLogin()
     {
-        $Mercurio = USingleton::getInstance('VJson');
-        $sessione = USingleton::getInstance('CSession');
-        $sessione->Session();
-        $data = $Mercurio->ricevi();
-        $dati = $data["dati"];
-        $sessione->impostaValore('email', $dati['email']);
-        $sessione->impostaValore('password', $dati['password']);
+        $Mercurio = new VLogin();
+        $dati = $Mercurio->effettuaLogin();
         $utente = EGestoreUtenti::autenticaUtente($dati['email'], $dati['password']);
         if (!is_bool($utente))
             $Mercurio->invia($utente->convertiInArray());
         else
             $Mercurio->invia($utente);
+    }
+
+    public function effettuaLogout()
+    {
+        $Mercurio = new VLogin();
+        $comando = $Mercurio->effettuaLogout();
+        if ($comando)
+        {
+            $session = USingleton::getInstance('CSession');
+            $session->__destroy();
+        }
     }
 }

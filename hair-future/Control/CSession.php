@@ -16,6 +16,11 @@ class CSession
         ini_set('session.gc_maxlifetime', '1800');
         ini_set('session.cookie_httponly', 'true');
     }
+
+    public function __destroy()
+    {
+        session_destroy();
+    }
     public function Session()
     {
         if (!isset($_SESSION['count']))

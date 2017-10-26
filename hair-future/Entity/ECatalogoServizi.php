@@ -203,4 +203,15 @@ class ECatalogoServizi
         }
         return $categorie;
     }
+
+    public function getDurataListaServizi($listaIdServizi)
+    {
+        $durata = 0;
+        foreach ($listaIdServizi as $item)
+        {
+            $servizio = $this->ottieniServizioByCodice($item);
+            $durata += $servizio->getDurata();
+        }
+        return $durata;
+    }
 }

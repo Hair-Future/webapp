@@ -18,16 +18,11 @@ class CPrenotazione
 
     public function inviaDurataListaServizi()
     {
-        $catalogoServizi = new ECatalogoServizi();
-        $durata = 0;
+        $catalogoServizi = USingleton::getInstance('ECatalogoServizi');
         $Mercurio = USingleton::getInstance('VJson');
-        $data = $Mercurio->ricevi();
-        $dati = $data["dati"];
-        foreach ($dati["lista"] as $item)
-        {
-            $servizio = $catalogoServizi->ottieniServizioByCodice($item);
-            $durata += $servizio->getDurata();
-        }
+        $dati = $Mercurio->ricevi();
+        $dati = $dati["dati"];
+        $durata = $catalogoServizi->getDurataListaServizi($dati);
         $dati = null;
         $dati['durata'] = $durata;
         $catalogoAppuntamenti = USingleton::getInstance('ECatalogoAppuntamenti');
