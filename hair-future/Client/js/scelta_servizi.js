@@ -49,7 +49,7 @@ $(document).ready(function() {
                             '<li>' +
                             '<input class="check" type="checkbox" name="servizio" value="' + data[i].servizi[j].codice + '">' +
                             data[i].servizi[j].nome +
-                            '<span id="prezzo" >'+data[i].servizi[j].codice+'€</span></li>';
+                            '<span id="prezzo" >'+data[i].servizi[j].prezzo+'€</span></li>';
                     }
                     // console.log(data[i].nome+": "+data[i].servizi[j].nome);
                     testo=testo+"</div>";

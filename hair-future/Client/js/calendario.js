@@ -30,40 +30,66 @@ $(document).ready(function() {
         1900: "19:00",
         1930: "19:30"
     };
+
     giorni={
-        lun: "Lunedì",
-        mar: "Martedì",
-        mer: "Mercoledì",
-        gio: "Giovedì",
-        ven: "Venerdì",
-        sab: "Sabato",
-        dom: "Domenica"
+        1: "Lunedì",
+        2: "Martedì",
+        3: "Mercoledì",
+        4: "Giovedì",
+        5: "Venerdì",
+        6: "Sabato",
+        0: "Domenica"
     };
 
+    mesi= {
+        0: "Gennaio",
+        1: "Febbraio",
+        2: "Marzo",
+        3: "Aprile",
+        4: "Maggio",
+        5: "Giugno",
+        6: "Luglio",
+        7: "Agosto",
+        8: "Settembre",
+        9: "Ottobre",
+        10: "Novembre",
+        11: "Dicembre"
+    };
 
-    for (i in orari)
+    oggi= new Date();
+
+    //Creazione dinamica della prima settimana
+    testo=+testo+'<thead> <tr id="giorni"> <th>&nbsp;</th>';
+    for (i=0;i<7;i++)
     {
-        testo=testo+"<tr><td class='colonna'>"+orari[i]+"</td>";
-        for(j in giorni)
+        giorno=new Date(oggi.getTime()+86400000*i);
+        testo=testo+'<th width="14%">'+giorni[giorno.getDay()]+'<br>'+giorno.getDate()+' '+mesi[giorno.getMonth()]+'</th>';
+    }
+    testo=testo+'</tr></thead> <tbody id="iniziotabella">';
+
+    for (j in orari)
+    {
+        testo=testo+"<tr><td class='colonna'>"+orari[j]+"</td>";
+        for (i=0;i<7;i++)
         {
-            testo = testo + '<td id="'+j+i+'" class=" no-events" rowspan="1"></td>'
+            giorno=new Date(oggi.getTime()+86400000*i);
+            testo = testo + '<td id="'+j+'|'+giorno.getDate()+'|'+giorno.getMonth()+'|'+giorno.getFullYear()+'" class="orario no-events" rowspan="1"></td>'
         }
         testo=testo+"</tr>";
     };
-
-    $('#iniziotabella').append(testo);
-
-    for(i in orari){
-        document.getElementById("lun"+i).style.backgroundColor="#969696";
-    }
+    testo=testo+ "</tbody>";
+    $('#calendario').append(testo);
 
 
+    $(".orario").click(function() {
+        var elemento = this.id.split("|");
+        console.log(elemento);
+    });
 
+    //per rendere lo sfondo grigio a elementi prenotati
+    //document.getElementById("lun"+i).style.backgroundColor="#969696";
 
 });
-
-
-
 
 
 /*

@@ -1,5 +1,13 @@
 .body{overflow:hidden}
 
+
+.sfondo{
+    background: url("../img/calendario.jpg");
+    background-size:     cover;                      /* <------ */
+    background-repeat:   no-repeat;
+    background-position: center center;  }
+
+
 #calendario{
     margin-top: 70px;
     margin-bottom: 20px;
@@ -8,6 +16,11 @@
 #giorni{
     background-color: rgba(163, 17, 227, 0.45);
 }
+
+td:hover{
+    background-color: rgba(139, 18, 210, 0.36);
+}
+
 
 .scrollbar
 {
@@ -18,7 +31,7 @@
 }
 
 .colonna {
-    background-color: rgba(152, 2, 48, 0.61);
+    background-color: rgba(189, 52, 227, 0.28);
 }
 
 .force-overflow
