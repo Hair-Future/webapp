@@ -178,6 +178,15 @@ class ECatalogoServizi
         return null;
     }
 
+    public function ottieniListaServiziByCodici($listaCodici)
+    {
+        $lista = array();
+        foreach ($listaCodici as $id)
+        {
+            $lista[] = $this->ottieniServizioByCodice($id);
+        }
+    }
+
     public function ottieniCategoria($nome)
     {
         return $this->ricercaCategoria($nome);
@@ -203,6 +212,7 @@ class ECatalogoServizi
         }
         return $categorie;
     }
+
 
     public function getDurataListaServizi($listaIdServizi)
     {

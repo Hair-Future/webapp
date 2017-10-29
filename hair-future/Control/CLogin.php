@@ -11,13 +11,18 @@ class CLogin
     public function effettuaLogin()
     {
         $Mercurio = new VLogin();
-        $dati = $Mercurio->effettuaLogin();
-        $utente = EGestoreUtenti::autenticaUtente($dati['email'], $dati['password']);
-        if (!is_bool($utente))
-            $Mercurio->invia($utente->convertiInArray());
-        else
-            $Mercurio->invia($utente);
-    }
+        $password = $Mercurio->ottieniPassword();
+        $email = $Mercurio->ottieniEmail();
+
+        $sessione = USingleton::getInstance('CSession');
+        $sessione->Session();
+        $sessione->impostaValore('email', $email);
+        $sessione->impostaValore('password', $password);
+
+        $utente = EGestoreUtenti::autenticaUtente($email, $password);
+
+        $Mercurio->inviaUtente($utente);
+        }
 
     public function effettuaLogout()
     {

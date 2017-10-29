@@ -11,22 +11,38 @@ class CPrenotazione
     public function inviaTuttiServizi()
     {
         $catalogo = USingleton::getInstance('ECatalogoServizi');
-        $Mercurio = USingleton::getInstance('VJson');
+        $Mercurio = new VJson;
         $dati = $catalogo->getListaCategorie();
         $Mercurio->invia($dati);
     }
 
-    public function inviaDurataListaServizi()
+    public function salvaListaServizi()
     {
+        $Mercurio = new VPrenotazione();
+        $session = USingleton::getInstance('CSession');
         $catalogoServizi = USingleton::getInstance('ECatalogoServizi');
-        $Mercurio = USingleton::getInstance('VJson');
-        $dati = $Mercurio->ricevi();
-        $dati = $dati["dati"];
-        $durata = $catalogoServizi->getDurataListaServizi($dati);
-        $dati = null;
-        $dati['durata'] = $durata;
+
+        $listaCodici = $Mercurio->riceviListaCodiciServizi();
+
+        $durata = $catalogoServizi->getDurataListaServizi($listaCodici);
+        $lista = $catalogoServizi->ottieniListaServiziByCodici($listaCodici);
+
+        $session->impostaValore('durataListaServiziAttuale', $durata);
+        $session->impostaValore('listaServiziAttuale', $lista);
+    }
+
+    public function inviaDatiCalendario()
+    {
+        $Mercurio = new VPrenotazione();
+        $session = USingleton::getInstance('CSession');
         $catalogoAppuntamenti = USingleton::getInstance('ECatalogoAppuntamenti');
-        $dati['intervalli'] = $catalogoAppuntamenti->ottieniIntervalliNonPrenotabili(7,date('Y-m-d'), $durata);
-        $Mercurio->invia($dati);
+
+        $data = $Mercurio->riceviPrimoGiornoCalendario();
+        $numeroGiorni =$Mercurio->riceviNumeroGiorni();
+
+        $durata = $session->leggiValore('durataListaServiziAttuale');
+        $intervalli = $catalogoAppuntamenti->ottieniIntervalliNonPrenotabili($numeroGiorni, $data, $durata);
+
+        $Mercurio->inviaDatiCalendario($durata, $intervalli);
     }
 }

@@ -8,15 +8,27 @@
 
 class VLogin extends VJson
 {
-    public function effettuaLogin()
+    public function ottieniEmail()
     {
-        $sessione = USingleton::getInstance('CSession');
-        $sessione->Session();
         $dati = $this->ricevi();
-        $dati = $dati["dati"];
-        $sessione->impostaValore('email', $dati['email']);
-        $sessione->impostaValore('password', $dati['password']);
-        return $dati;
+        $email = $dati["dati"]['email'];
+        return $email;
+    }
+
+    public function ottieniPassword()
+    {
+        $dati = $this->ricevi();
+        $password = $dati["dati"]['password'];
+        return $password;
+    }
+
+    public function inviaUtente($utente)
+    {
+        if (!is_bool($utente))
+            $this->invia($utente->convertiInArray());
+        else
+            $this->invia($utente);
+
     }
 
     /**
