@@ -3,6 +3,22 @@
  */
 
 $(document).ready(function() {
+    indirizzo='../index.php';
+    
+    var richiesta= {
+        controller: "CPrenotazione",
+        metodo: "inviaDatiCalendario"
+    };
+
+    $.post(indirizzo,
+        JSON.stringify(
+            {richiesta: richiesta}),
+        function (dati)
+        {
+            console.log(dati);
+        },
+        "json"
+    );
     testo="";
     orari={
         800: "08:00",
@@ -86,8 +102,9 @@ $(document).ready(function() {
         console.log(elemento);
     });
 
+    document.getElementById("830|31|9|2017").style.backgroundColor="#969696";
     //per rendere lo sfondo grigio a elementi prenotati
-    //document.getElementById("lun"+i).style.backgroundColor="#969696";
+
 
 });
 

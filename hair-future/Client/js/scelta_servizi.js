@@ -70,7 +70,6 @@ $(document).ready(function() {
             },
             "json"
 
-
         );
 
 
@@ -91,7 +90,7 @@ $(document).ready(function() {
 
         var richiesta= {
             controller: "CPrenotazione",
-            metodo: "inviaDurataListaServizi"
+            metodo: "salvaListaServizi"
         };
 
         $.post(indirizzo,
@@ -102,7 +101,7 @@ $(document).ready(function() {
                 }),
             function (intervalli)
             {
-                console.log(intervalli);
+                console.log("passo all'altra pagina");
             },
             "json"
         );
