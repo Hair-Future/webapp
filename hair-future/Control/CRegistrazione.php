@@ -10,9 +10,8 @@ class CRegistrazione
 {
     public function Registra()
     {
-        $Mercurio = USingleton::getInstance('VJson');
-        $data = $Mercurio->ricevi();
-        $dati = $data["dati"];
+        $Mercurio = new VRegistrazione();
+        $dati = $Mercurio->ottieniDati();
         $utente = EGestoreUtenti::creaNuovoUtente($dati["nome"], $dati["cognome"], $dati["telefono"],
             $dati["email"], $dati["password"], "Cliente");
         if (!is_int($utente))
