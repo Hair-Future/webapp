@@ -72,4 +72,8 @@ class FDb{
         return $this->sql->execute($values);
     }
 
+    public function queryNoValues(){
+        return $this->sql->execute();
+    }
+
 }

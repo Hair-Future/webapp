@@ -59,7 +59,7 @@ class EAppuntamento{
         $this->data = $load['data'];
         $this->ora = $load['ora'];
         $this->utente = EGestoreUtenti::ottieniUtenteByID($load['utente']);
-        $service = new ECatalogoServizi();
+        $service = USingleton::getInstance('ECatalogoServizi');
         $arrayCodiciServizi = explode('|', $load['listaServizi']);
         foreach ($arrayCodiciServizi as $servizio) {
             $temp = $service->ottieniServizioByCodice($servizio);
@@ -201,5 +201,10 @@ class EAppuntamento{
         return $string;
     }
 
+    public function effettuato()
+    {
+        $Caronte = new FAppuntamento();
+        $Caronte->done($this->codice);
+    }
 }
 ?>

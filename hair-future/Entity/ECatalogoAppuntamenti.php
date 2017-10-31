@@ -209,7 +209,6 @@ class ECatalogoAppuntamenti
             }
         }
         $intervalli = array();
-        $i = 0;
         foreach ($appuntamenti as $item)
         {
             $intervalli[$item->getData()][] = array('inizioIntervallo' => $item->getOraInizio(),
@@ -239,5 +238,19 @@ class ECatalogoAppuntamenti
             }
         }
         return $nonPrenotabili;
+    }
+
+    public function segnaEffettuato($codice)
+    {
+        $appuntamento = $this->searchAppuntamentoByCodice($codice);
+        $appuntamento->effettuato();
+    }
+
+    public function segnaEffettuati($codici)
+    {
+        foreach ($codici as $codice)
+        {
+            $this->segnaEffettuato($codice);
+        }
     }
 }

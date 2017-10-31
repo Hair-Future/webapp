@@ -50,6 +50,14 @@ class FAppuntamento extends FDb{
         parent::query($values);
     }
 
+    public function done($id)
+    {
+        $this->sql = $this->con->prepare("UPDATE Appuntamento
+                     SET effettuato = TRUE 
+                     WHERE codice = ?;");
+        parent::query(array($id));
+    }
+
     /**
      * @param string $codice
      */

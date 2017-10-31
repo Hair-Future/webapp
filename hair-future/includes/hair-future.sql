@@ -35,7 +35,8 @@ CREATE TABLE `Appuntamento` (
   `durata` int(3) NOT NULL,
   `costo` float NOT NULL DEFAULT '0',
   `utente` varchar(25) NOT NULL,
-  `listaServizi` varchar(100) NOT NULL
+  `listaServizi` varchar(100) NOT NULL,
+  `effettuato` BOOLEAN NOT NULL DEFAULT FALSE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
