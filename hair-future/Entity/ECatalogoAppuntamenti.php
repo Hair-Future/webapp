@@ -103,16 +103,23 @@ class ECatalogoAppuntamenti
 
     public function prenotaAppuntamento($email, $listaServizi, $data, $ora)
     {
+        $mutex = new FMutex();
+        $mutex->wait();
+        $this->carica();
         if ($this->controllaPossibilitaPrenotazione($data,$ora,$listaServizi)==0)
         {
             $appuntamento = new EAppuntamento();
             $appuntamento->sceltaServizi($email, $listaServizi);
             $appuntamento->addAppuntamento($data, $ora);
+            $mutex->signal();
             $this->carica();
             return 0;
         }
         else
+        {
+            $mutex->signal();
             return -1;
+        }
     }
 
     public function modificaAppuntamento($id, $data, $ora, $email)
