@@ -155,21 +155,20 @@ class ECatalogoAppuntamenti
 
     public function prenotaAppuntamento($email, $listaServizi, $data, $ora)
     {
-        $mutex = new FMutex();
-        $mutex->wait();
+        FDb::lock("Appuntamento");
         $this->carica();
         if ($this->controllaPossibilitaPrenotazione($data,$ora,$listaServizi)==0)
         {
             $appuntamento = new EAppuntamento();
             $appuntamento->sceltaServizi($email, $listaServizi);
             $appuntamento->addAppuntamento($data, $ora);
-            $mutex->signal();
+            FDb::unlock();
             $this->carica();
             return 0;
         }
         else
         {
-            $mutex->signal();
+            FDb::unlock();
             return -1;
         }
     }

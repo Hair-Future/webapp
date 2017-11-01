@@ -16,7 +16,7 @@ class FrontController
 
     public function __construct()
     {
-        $this->json = USingleton::getInstance('VJson');
+        $this->json = new VJson();
         $this->parseUri();
     }
 

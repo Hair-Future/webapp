@@ -11,14 +11,15 @@ class FDb{
     protected $_result;
     protected $sql;
     private static $connection;
+    private static $semaforo = false;
 
-    private static function &getConnection()
+    private static function &getConnection($className)
     {
-        if (!is_null(FDb::$connection))
+        if (is_null(FDb::$connection) || (FDb::$semaforo != $className))
         {
             global $config;
             try {
-                FDb::$connection= new PDO($config['dsn'], $config['username'], $config['password'], $config['options']);
+                FDb::$connection = new PDO($config['dsn'], $config['username'], $config['password'], $config['options']);
             }catch(PDOException $e){
                 print "Error!: " . $e->getMessage() . ".<br/>";
                 die();
@@ -29,13 +30,29 @@ class FDb{
             return FDb::$connection;
     }
 
+    public static function lock($nomeTabella)
+    {
+        self::$connection = self::getConnection("F".$nomeTabella);
+        $sql = self::$connection->prepare("LOCK TABLES ? WRITE");
+        $sql->execute(array($nomeTabella));
+        self::$semaforo = "F".$nomeTabella;
+    }
+
+    public static function unlock()
+    {
+        $sql = self::$connection->prepare("UNLOCK TABLES");
+        $sql->execute();
+        self::$connection = null;
+        self::$semaforo = FALSE;
+    }
+
     /**
      * FDb constructor.
      */
 
     public function __construct(){
 
-        $this->con = FDb::getConnection();
+        $this->con = self::getConnection(get_class($this));
     }
 
     /**
@@ -43,7 +60,9 @@ class FDb{
      */
     public function __destruct()
     {
-        //$this->con = null;
+        if (!self::$semaforo)
+            self::$connection = null;
+        $this->con = null;
     }
 
     /**
