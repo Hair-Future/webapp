@@ -8,6 +8,9 @@
 
 class CLogin
 {
+    /**
+     *
+     */
     public function effettuaLogin()
     {
         $Mercurio = new VLogin();
@@ -22,8 +25,25 @@ class CLogin
         $utente = EGestoreUtenti::autenticaUtente($email, $password);
 
         $Mercurio->inviaUtente($utente);
-        }
+    }
 
+    /**
+     *
+     */
+    public function check()
+    {
+        $Mercurio = new VLogin();
+        $sessione = USingleton::getInstance('CSession');
+
+        $email = $sessione->leggiValore('email');
+        $utente = EGestoreUtenti::ottieniUtenteByID($email);
+
+        $Mercurio->inviaUtente($utente);
+    }
+
+    /**
+     * 
+     */
     public function effettuaLogout()
     {
         $Mercurio = new VLogin();
