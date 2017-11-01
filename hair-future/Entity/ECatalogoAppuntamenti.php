@@ -22,6 +22,41 @@ class ECatalogoAppuntamenti
         }
     }
     /**
+     * @param $data
+     * @param $ora
+     * @param $listaServizi
+     * @return int
+     *
+     * metodo che riceve una data in formato 'Y-m-d', e l'ora in formato 'H:i:s'
+     */
+    private function controllaPossibilitaPrenotazione($data, $ora, $listaServizi)
+    {
+        $startTime = strtotime($data." ".$ora);
+        $durata = 0;
+        foreach ($listaServizi as $servizio)
+        {
+            $durata += $servizio->getDurata();
+        }
+
+        $endTime = $startTime + (($durata)*60);
+        $listaAppuntamenti = $this->searchAppuntamentoByData($data);
+        foreach ($listaAppuntamenti as $appuntamento)
+        {
+            $oraInizioTemp = strtotime($data." ".$appuntamento->getOraInizio());
+            $oraFineTemp = strtotime($data." ".$appuntamento->getOraFine());
+
+            if (((($startTime <= $oraInizioTemp) && ($endTime >= $oraFineTemp)) ||
+                (($startTime <= $oraInizioTemp) && (($endTime <= $oraFineTemp) && ($endTime >= $oraInizioTemp))) ||
+                ((($startTime >= $oraInizioTemp) && ($startTime <= $oraFineTemp)) && ($endTime >= $oraFineTemp)) ||
+                (($startTime >= $oraInizioTemp) && ($endTime <= $oraFineTemp))))
+            {
+                return -1;
+            }
+        }
+        return 0;
+    }
+
+    /**
      * ECatalogoAppuntamenti constructor.
      */
     public function __construct()
@@ -46,6 +81,7 @@ class ECatalogoAppuntamenti
         return $result;
     }
 
+
     /**
      * @return array
      * metodo che restituisce tutti gli appuntamenti della data corrente
@@ -58,7 +94,6 @@ class ECatalogoAppuntamenti
         }
         return $result;
     }
-
 
     /**
      * @param $data
@@ -75,6 +110,7 @@ class ECatalogoAppuntamenti
         return $result;
     }
 
+
     /**
      * @param $codice
      * @return bool|mixed
@@ -87,7 +123,6 @@ class ECatalogoAppuntamenti
         }
         return false;
     }
-
 
     /**
      * @return string
@@ -152,50 +187,11 @@ class ECatalogoAppuntamenti
         return -1;
     }
 
-    /**
-     * @param $data
-     * @param $ora
-     * @param $listaServizi
-     * @return int
-     *
-     * metodo che riceve una data in formato 'Y-m-d', e l'ora in formato 'H:i:s'
-     */
-    public function controllaPossibilitaPrenotazione($data, $ora, $listaServizi)
-    {
-        $startTime = strtotime($data." ".$ora);
-        $durata = 0;
-        foreach ($listaServizi as $servizio)
-        {
-            $durata += $servizio->getDurata();
-        }
 
-        $endTime = $startTime + (($durata)*60);
-        $listaAppuntamenti = $this->searchAppuntamentoByData($data);
-        foreach ($listaAppuntamenti as $appuntamento)
-        {
-            $oraInizioTemp = strtotime($data." ".$appuntamento->getOraInizio());
-            $oraFineTemp = strtotime($data." ".$appuntamento->getOraFine());
-
-            if (((($startTime <= $oraInizioTemp) && ($endTime >= $oraFineTemp)) ||
-                (($startTime <= $oraInizioTemp) && (($endTime <= $oraFineTemp) && ($endTime >= $oraInizioTemp))) ||
-                ((($startTime >= $oraInizioTemp) && ($startTime <= $oraFineTemp)) && ($endTime >= $oraFineTemp)) ||
-                (($startTime >= $oraInizioTemp) && ($endTime <= $oraFineTemp))))
-            {
-                return -1;
-            }
-        }
-        return 0;
-    }
-
-    /**
-     * @param $numGiorni
-     * @param $data: date(Y-m-d)
-     * @return array
-     */
-    public function ottieniIntervalliOccupati($numGiorni, $data)
+    public function ottieniAppuntamentiPeriodo($dataInizio, $numGiorni)
     {
         $appuntamenti = array();
-        $date = new DateTime($data);
+        $date = new DateTime($dataInizio);
         for ($i = 0; $i < $numGiorni; $i++)
         {
             $date->modify('+1 day');
@@ -208,6 +204,16 @@ class ECatalogoAppuntamenti
                 }
             }
         }
+        return $appuntamenti;
+    }
+    /**
+     * @param $numGiorni
+     * @param $data: date(Y-m-d)
+     * @return array
+     */
+    public function ottieniIntervalliOccupati($numGiorni, $data)
+    {
+        $appuntamenti = $this->ottieniAppuntamentiPeriodo($data, $numGiorni);
         $intervalli = array();
         foreach ($appuntamenti as $item)
         {
@@ -246,7 +252,7 @@ class ECatalogoAppuntamenti
         $appuntamento->effettuato();
     }
 
-    public function segnaEffettuati($codici)
+    public function segnaEffettuati(array $codici)
     {
         foreach ($codici as $codice)
         {

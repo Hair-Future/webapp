@@ -10,18 +10,32 @@ class FDb{
     protected $con;
     protected $_result;
     protected $sql;
+    private static $connection;
+
+    private static function &getConnection()
+    {
+        if (!is_null(FDb::$connection))
+        {
+            global $config;
+            try {
+                FDb::$connection= new PDO($config['dsn'], $config['username'], $config['password'], $config['options']);
+            }catch(PDOException $e){
+                print "Error!: " . $e->getMessage() . ".<br/>";
+                die();
+            }
+            return FDb::$connection;
+        }
+        else
+            return FDb::$connection;
+    }
 
     /**
      * FDb constructor.
      */
+
     public function __construct(){
-        global $config;
-        try {
-            $this->con = new PDO($config['dsn'], $config['username'], $config['password'], $config['options']);
-        }catch(PDOException $e){
-            print "Error!: " . $e->getMessage() . ".<br/>";
-            die();
-        }
+
+        $this->con = FDb::getConnection();
     }
 
     /**
@@ -29,7 +43,7 @@ class FDb{
      */
     public function __destruct()
     {
-        $this->con = null;
+        //$this->con = null;
     }
 
     /**

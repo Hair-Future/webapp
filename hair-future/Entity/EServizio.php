@@ -162,17 +162,26 @@ class EServizio
         $this->updateAttributi();
     }
 
+    /**
+     *
+     */
     public function rimuoviDefinitivamente()
     {
         $Caronte = new FServizio();
         $Caronte->delete($this->codice);
     }
 
+    /**
+     * @return string
+     */
     public function __toString()
     {
         return "Nome servizio: ".$this->nome.", Codice: ".$this->codice.", Descrizione  ".$this->descrizione.", Prezzo: ".$this->prezzo.", Durata: ".$this->durata."\n";
     }
 
+    /**
+     * @return array
+     */
     public function convertiInArray()
     {
         $dati = array();

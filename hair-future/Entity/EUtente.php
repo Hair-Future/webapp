@@ -88,7 +88,7 @@ abstract class EUtente
         $attributi['cognome'] = $this->cognome;
         $attributi['telefono'] = $this->recapito;
         $attributi['email'] = $this->email;
-        $attributi['password'] = $this->password;
+        //$attributi['password'] = $this->password;
         $attributi['tipo'] = $this->getTipo();
         return $attributi;
     }

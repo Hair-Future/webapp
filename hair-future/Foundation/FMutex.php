@@ -10,7 +10,7 @@ class FMutex extends FDb
 {
     public function wait()
     {
-        $this->sql = $this->con->prepare("BEGIN TRANSACTION;");
+        $this->sql = $this->con->prepare("START TRANSACTION;");
         parent::queryNoValues();
     }
 
@@ -18,6 +18,5 @@ class FMutex extends FDb
     {
         $this->sql = $this->con->prepare("COMMIT;");
         parent::queryNoValues();
-
     }
 }

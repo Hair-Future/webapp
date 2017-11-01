@@ -80,6 +80,26 @@ CREATE TABLE `Utente` (
   `tipo` varchar(20) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+CREATE TABLE `OrarioApertura` (
+  `giorno` char(20) NOT NULL,
+  `aperturaMattina` time DEFAULT '09:00:00',
+  `chiusuraMattina` time DEFAULT '13:00:00',
+  `aperturaPomeriggio` time DEFAULT '16:00:00',
+  `chiusuraPomeriggio` time DEFAULT '19:00:00'
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+INSERT INTO `OrarioApertura` (`giorno`) VALUES
+  ('Lunedì'),
+  ('Martedì'),
+  ('Mercoledì'),
+  ('Giovedì'),
+  ('Venerdì'),
+  ('Sabato'),
+  ('Domenica');
+
+ALTER TABLE `OrarioApertura`
+  ADD PRIMARY KEY (`giorno`);
+
 --
 -- Indici per le tabelle scaricate
 --
