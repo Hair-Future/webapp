@@ -25,6 +25,15 @@ class FAppuntamento extends FDb{
         return parent::search(array($values));
     }
 
+    public function searchByPeriodo($values)
+    {
+        $this->sql = $this->con->prepare("SELECT *
+                      FROM Appuntamento
+                      WHERE data >= ? and data <= ?
+                      ORDER BY `Appuntamento`.`ora` ASC;");
+        return parent::search($values);
+    }
+
     /**
      * @param array $values
      */
