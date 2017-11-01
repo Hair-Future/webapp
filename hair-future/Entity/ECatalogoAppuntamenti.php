@@ -112,6 +112,23 @@ class ECatalogoAppuntamenti
 
 
     /**
+     * @param $dataInizio
+     * @param $dataFine
+     * @return array
+     * riceve due date in formato 'Y-m-d' e restituisce tutti gli appuntamenti compresi nelle due date
+     */
+    public function searchAppuntamentoByPeriodo($dataInizio, $dataFine){
+        $result = array();
+        $db = new FAppuntamento();
+        $rows = $db->searchByPeriodo(array($dataInizio, $dataFine));
+        foreach($rows as $row){
+            $appuntamento = new EAppuntamento();
+            $result[] = $appuntamento->loadByValori($row);
+        }
+        return $result;
+    }
+
+    /**
      * @param $codice
      * @return bool|mixed
      * metodo che riceve un codice di un appuntamento e lo restituisce, se esiste
