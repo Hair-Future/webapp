@@ -29,6 +29,8 @@ class EAppuntamento{
      */
     private $listaServizi;
 
+    private $effettuato = 0;
+
     private function calcolaDurataCostoAppuntamento()
     {
         $this->durata = 0;
@@ -67,6 +69,7 @@ class EAppuntamento{
             $this->durata += $temp->getDurata();
             $this->costo += $temp->getPrezzo();
         }
+        $this->effettuato = $load['effettuato'];
         return $this;
     }
 
@@ -182,6 +185,14 @@ class EAppuntamento{
     public function getUtente()
     {
         return $this->utente;
+    }
+
+    public function getListaServizi(){
+        return $this->listaServizi;
+    }
+
+    public function getEffettuato(){
+        return $this->effettuato;
     }
 
     /**

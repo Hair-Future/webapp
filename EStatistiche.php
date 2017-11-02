@@ -25,7 +25,7 @@ class EStatistiche
         }
         foreach($appuntamenti as $appuntamento){
             $utente = (string)$appuntamento->getUtente()->getEmail();
-            if($appuntamento->getEffettuato())
+            //if($appuntamento->getEffettuato())
                 $risultati[$utente] += $appuntamento->getCosto();
         }
         $max = 0;
@@ -49,81 +49,48 @@ class EStatistiche
      * restituisce il guadagno in un dato periodo di tempo
      */
     public function guadagno($dataInizio, $dataFine){
-        $catalogoAppuntamenti = USingleton::getInstance('ECatalogoAppuntamenti');
-        $appuntamenti = $catalogoAppuntamenti->searchAppuntamentoByPeriodo($dataInizio, $dataFine);
-        $result = 0;
-        foreach($appuntamenti as $appuntamento){
-            if($appuntamento->getEffettuato())
-                $result += $appuntamento->getCosto();
-        }
-        return $result;
-    }
-
-    /**
-     * @param $dataInizio
-     * @param $dataFine
-     * @return array
-     * restituisce la percentuale di applicazione di ogni servizio in un dato periodo di tempo
-     * i servizi non utilizzati non vengono mostrati
-     */
-    public function serviziApplicati($dataInizio, $dataFine){
-        $catalogoAppuntamenti = USingleton::getInstance('ECatalogoAppuntamenti');
-        $appuntamenti = $catalogoAppuntamenti->searchAppuntamentoByPeriodo($dataInizio, $dataFine);
-        $totale = array();
-        $max = 0;
-        $result = array();
-        foreach($appuntamenti as $appuntamento){
-            if ($appuntamento->getEffettuato()) {
-                foreach ($appuntamento->getListaServizi() as $servizio) {
-                    $totale[$servizio->getCodice()] = 0;
-                }
-            }
-        }
-        foreach($appuntamenti as $appuntamento) {
-            if ($appuntamento->getEffettuato()) {
-            foreach ($appuntamento->getListaServizi() as $servizio) {
-                $totale[$servizio->getCodice()] += 1;
-                $max += 1;
-            }
-            }
-        }
-        $i = 0;
-        foreach($totale as $key=>$value){
-            $result[$i]['servizio'] = $key;
-            $result[$i]['percentuale'] = $value / $max * 100;
-            $i++;
-        }
-        return $result;
-    }
-
-    /**
-     * @param $dataInizio
-     * @param $dataFine
-     * @return array
-     * restituisce un array degli utenti che non si sono presentati ad almeno un appuntamento e il numero di appuntamenti mancati
-     */
-    public function appuntamentiMancati($dataInizio, $dataFine){
-        $mancati = array();
+        $risultati = array();
         $catalogoAppuntamenti = USingleton::getInstance('ECatalogoAppuntamenti');
         $appuntamenti = $catalogoAppuntamenti->searchAppuntamentoByPeriodo($dataInizio, $dataFine);
         foreach ($appuntamenti as $appuntamento){
             $utente = (string)$appuntamento->getUtente()->getEmail();
-            $mancati[$utente] = 0;
+            $risultati[$utente] = 0;
         }
-        foreach($appuntamenti as $appuntamento) {
-            $utente = (string)$appuntamento->getUtente()->getEmail();
-            if ($appuntamento->getEffettuato() == 0)
-                $mancati[$utente] += 1;
-        }
-        $result = array();
-        $i = 0;
-        foreach($mancati as $key=>$value){
-            if($mancati[$key] > 0) {
-                $result[$i]['utente'] = $key;
-                $result[$i]['mancati'] = $value;
-            }
-            $i++;
+        $result = 0;
+        foreach($appuntamenti as $appuntamento){
+            $result += $appuntamento->getCosto();
         }
         return $result;
+    }
+
+    /**
+     * @param $dataInizio
+     * @param $dataFine
+     * @return string
+     * restituisce il tempo impiegato negli appuntamenti e il tempo non utilizzato in un dato periodo di tempo
+     */
+    public function tempoImpiegato($dataInizio, $dataFine){
+        $catalogoServizi = USingleton::getInstance('ECatalogoServizi');
+    }
+
+    /**
+     * @param $dataInizio
+     * @param $dataFine
+     * @return string
+     * restituisce la percentuale di utilizzo di ogni servizio in un dato periodo di tempo
+     * i servizi non utilizzati non vengono mostrati
+     */
+    public function serviziApplicati($dataInizio, $dataFine){
+        $catalogoServizi = USingleton::getInstance('ECatalogoServizi');
+    }
+
+    /**
+     * @param $dataInizio
+     * @param $dataFine
+     * @return array
+     * restituisce gli utenti che non si sono presentati ad almeno un appuntamento e il numero di appuntamenti mancati
+     */
+    public function appuntamentiMancati($dataInizio, $dataFine){
+        $catalogoServizi = USingleton::getInstance('ECatalogoServizi');
     }
 }
