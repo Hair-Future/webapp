@@ -30,7 +30,7 @@ class FDb{
             return FDb::$connection;
     }
 
-    public static function lock($nomeTabella)
+    protected static function lock($nomeTabella)
     {
         self::$connection = self::getConnection("F".$nomeTabella);
         $sql = self::$connection->prepare("LOCK TABLES ? WRITE");
@@ -38,7 +38,7 @@ class FDb{
         self::$semaforo = "F".$nomeTabella;
     }
 
-    public static function unlock()
+    protected static function unlock()
     {
         $sql = self::$connection->prepare("UNLOCK TABLES");
         $sql->execute();

@@ -155,20 +155,20 @@ class ECatalogoAppuntamenti
 
     public function prenotaAppuntamento($email, $listaServizi, $data, $ora)
     {
-        FDb::lock("Appuntamento");
+        FAppuntamento::lock();
         $this->carica();
         if ($this->controllaPossibilitaPrenotazione($data,$ora,$listaServizi)==0)
         {
             $appuntamento = new EAppuntamento();
             $appuntamento->sceltaServizi($email, $listaServizi);
             $appuntamento->addAppuntamento($data, $ora);
-            FDb::unlock();
+            FAppuntamento::unlock();
             $this->carica();
             return 0;
         }
         else
         {
-            FDb::unlock();
+            FAppuntamento::unlock();
             return -1;
         }
     }

@@ -12,6 +12,16 @@ class FAppuntamento extends FDb{
         parent::__construct();
     }
 
+    public static function lock()
+    {
+        parent::lock("Appuntamento");
+    }
+
+    public static function unlock()
+    {
+        parent::unlock();
+    }
+
     /**
      * @param string $codice
      * @return array
