@@ -24,7 +24,7 @@ class VLogin extends VJson
 
     public function inviaUtente($utente)
     {
-        if (!is_bool($utente))
+        if (!is_bool($utente) && !is_int($utente))
             $this->invia($utente->convertiInArray());
         else
             $this->invia($utente);
