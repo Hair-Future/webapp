@@ -217,5 +217,21 @@ class EAppuntamento{
         $Caronte = new FAppuntamento();
         $Caronte->done($this->codice);
     }
+
+    public function convertiInArray()
+    {
+        $dati = array();
+        $dati['codice'] = $this->codice;
+        $dati['data'] = $this->data;
+        $dati['ora'] = $this->ora;
+        $dati['durata'] = $this->durata;
+        $dati['costo'] = $this->costo;
+        $dati['utente'] = $this->utente->convertiInArray();
+        foreach ($this->listaServizi as $servizio)
+        {
+            $dati['servizi'][] = $servizio->convertiInArray();
+        }
+        return $dati;
+    }
 }
 ?>
