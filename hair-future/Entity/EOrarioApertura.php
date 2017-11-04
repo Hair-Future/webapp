@@ -29,7 +29,7 @@ class EOrarioApertura
         $dati = array();
         foreach ($this->listaGiorni as $giorno)
         {
-            $dati[$giorno->getNome()] = $giorno->covertiInArray();
+            $dati[$giorno->getNome()] = $giorno->convertiInArray();
         }
         return $dati;
     }
