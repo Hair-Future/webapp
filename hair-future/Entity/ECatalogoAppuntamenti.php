@@ -362,10 +362,17 @@ class ECatalogoAppuntamenti
         $prenotabili = array();
         for ($i = 0; $i < $numGiorni; $i++)
         {
-            $prenotabili[$date->format('Y-m-d')]['mattina'] =
-                $this->ottieniIntervalliPrenotabiliMattinaOppurePomeriggio($date->format('Y-m-d'), $durataAppuntamento, 'Mattina');
-            $prenotabili[$date->format('Y-m-d')]['pomeriggio'] =
-                $this->ottieniIntervalliPrenotabiliMattinaOppurePomeriggio($date->format('Y-m-d'), $durataAppuntamento, 'Pomeriggio');
+            $intervalli = $this->ottieniIntervalliPrenotabiliMattinaOppurePomeriggio($date->format('Y-m-d'), $durataAppuntamento, 'Mattina');
+            foreach ($intervalli as $intervallo)
+            {
+                $prenotabili[$date->format('Y-m-d')][] = $intervallo;
+            }
+
+            $intervalli = $this->ottieniIntervalliPrenotabiliMattinaOppurePomeriggio($date->format('Y-m-d'), $durataAppuntamento, 'Pomeriggio');
+            foreach ($intervalli as $intervallo)
+            {
+                $prenotabili[$date->format('Y-m-d')][] = $intervallo;
+            }
             $date->modify('+1 day');
         }
         return $prenotabili;
