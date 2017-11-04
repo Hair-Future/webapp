@@ -11,7 +11,7 @@ class CPrenotazione
     public function inviaTuttiServizi()
     {
         $catalogo = USingleton::getInstance('ECatalogoServizi');
-        $Mercurio = new VJson;
+        $Mercurio = new VPrenotazione();
         $dati = $catalogo->getListaCategorie();
         $Mercurio->invia($dati);
     }
@@ -46,5 +46,23 @@ class CPrenotazione
         $Mercurio->inviaDatiCalendario($durata, $intervalli);
     }
 
+    public function effettuaPrenotazione()
+    {
+        $Mercurio = new VPrenotazione();
+        $oraAppuntamento = $Mercurio->riceviOraInizioAppuntamento();
+        $dataAppuntamento = $Mercurio->riceviDataAppuntamento();
 
+        $session = USingleton::getInstance('CSession');
+        $listaServizi = $session->leggiValore('listaServiziAttuale');
+        $utente = $session->leggiValore('utente');
+
+        if ($utente->getTipo() == 'Cliente')
+        {
+            $check = $utente->prenotaAppuntamento($listaServizi, $dataAppuntamento, $oraAppuntamento);
+            $Mercurio->invia($check);
+        }
+        else
+            $Mercurio->invia("l'utente non è un cliente");
+
+    }
 }
