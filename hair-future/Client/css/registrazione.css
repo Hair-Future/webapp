@@ -1,8 +1,8 @@
 .sfondo{
-    background: url("../img/sfondo_registrazione1.png");
+    background: url("../img/sfondo_registrazione2.png");
     background-size:     cover;
     background-repeat:   no-repeat;
-    background-position: center center;  }
+    background-position: center top;  }
 
 .column
 {

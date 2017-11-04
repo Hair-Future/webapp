@@ -1,10 +1,11 @@
 .body{overflow:hidden}
 
 .sfondo{
-    background: url("../img/calendario.jpg");
+    background: url("../img/hair3.jpg");
     background-size:     cover;
     background-repeat:   no-repeat;
-    background-position: center center;  }
+    background-position: center top;
+    background-attachment: fixed}
 
 #calendario{
     margin-top: 70px;
@@ -12,23 +13,28 @@
 }
 
 #giorni{
-    background-color: rgba(163, 17, 227, 0.45);
+    background-color: rgba(163, 17, 227, 0.9);
 }
 
-td.has-events :hover{
-    background-color: rgba(216, 202, 227, 0.93);
+.colonna {
+    background-color: rgba(189, 52, 227, 0.9);
+}
+
+table.calendar > tbody > tr > td.has-events:hover{
+    background-color: rgba(163, 17, 227, 0.7);
+}
+
+td {
+    background-color: rgba(213, 212, 221, 0);
 }
 
 .scrollbar
 {
     float: left;
-    background: #F5F5F5;
+    background-color: rgba(213, 212, 221, 0.7);
     overflow-y: scroll;
 }
 
-.colonna {
-    background-color: rgba(189, 52, 227, 0.28);
-}
 
 .force-overflow
 {
@@ -80,11 +86,11 @@ table.calendar > tbody > tr > td.has-events {
     color: white;
     cursor: pointer;
     padding: 0;
-    border-radius: 4px;
+    border-radius: 10px;
 }
 
 table.calendar > tbody > tr > td.has-events > div {
-    background-color: rgba(109, 109, 109, 0.36);
+    background-color: rgba(109, 109, 109, 0);
     border-left: 1px solid white;
 }
 
@@ -96,9 +102,7 @@ table.calendar > tbody > tr > td.has-events > div:first-child {
 table.calendar > tbody > tr > td.has-events > div.practice {
     opacity: 0.7;
 }
-table.calendar > tbody > tr > td.conflicts > div > span.title {
-//color: red;
-}
+
 table.calendar > tbody > tr > td.max-conflicts > div {
     background-color: #f720ff;
     color: white;

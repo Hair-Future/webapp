@@ -4,11 +4,18 @@
     margin-bottom: 20px;
 }
 
+#inviaServizi
+{
+    float:right;
+}
+
 .sfondo{
-    background: url("../img/scelta_servizi.jpg");
-    background-size:     cover;                      /* <------ */
+    background: url("../img/servizi1.jpg");
+    background-size:     cover;
     background-repeat:   no-repeat;
-    background-position: center center;  }
+    background-position: 0px -20px;
+    /*background-attachment: fixed;*/
+}
 
 
 .ui-state-active,

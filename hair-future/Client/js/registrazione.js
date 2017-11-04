@@ -3,7 +3,6 @@
  */
 $(document).ready(function()
 {indirizzo='../index.php';
-    $('#no').hide();
 
     /*Evento tasto Registrati*/
     $('#registrazione').click(function ()
@@ -46,7 +45,7 @@ $(document).ready(function()
                      }),
                  function (risultato) {
                      $(".result").html(risultato);
-                     alert(risultato.nome);
+                     alert("Ciao "+risultato.nome+", hai effettuato la registrazione con successo!");
                  },
                  "json"
              );
@@ -66,11 +65,6 @@ $(document).ready(function()
         var pass2 = $('#pass2').val();
         var login = "login";
 
-        if (pass1 !== pass2) {
-            $('#no').show();
-        } else {
-            $('#no').hide();
-        }
     });
 
 
