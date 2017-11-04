@@ -28,14 +28,5 @@ class VLogin extends VJson
             $this->invia($utente->convertiInArray());
         else
             $this->invia($utente);
-
-    }
-
-    /**
-     * return bool
-     */
-    public function effettuaLogout()
-    {
-        //TODO
     }
 }
