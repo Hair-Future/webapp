@@ -25,8 +25,8 @@ class CSession
     {
         if (!isset($_SESSION['count']))
         {
-            $_SESSION['count']=0;
-            $_SESSION['start']=time();
+            $_SESSION['count'] = 0;
+            $_SESSION['start'] = time();
         }
         $_SESSION['count']++;
     }

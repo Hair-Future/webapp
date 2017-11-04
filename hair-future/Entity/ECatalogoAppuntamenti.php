@@ -329,8 +329,10 @@ class ECatalogoAppuntamenti
                 if (strtotime($intervallo["inizioIntervallo"]) >= strtotime($fineIntervalloPrec))
                 {
                     if (strtotime($intervallo["inizioIntervallo"]) < strtotime($giorno->{"getChiusura".$mattinaPomeriggio}()))
+                    {
                         $libero = strtotime($intervallo["inizioIntervallo"]) - strtotime($fineIntervalloPrec);
-                    $numIntervalli = floor($libero/$durata);
+                        $numIntervalli = floor($libero/$durata);
+                    }
                     for ($i = 0; $i<$numIntervalli; $i++)
                     {
                         $prenotabili[] = $fineIntervalloPrec;

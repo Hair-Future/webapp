@@ -29,7 +29,7 @@ class CLogin
     /**
      * permette di verificare se il login è stato eseguito correttamente.
      * in caso di successo verranno restituiti al client i dati relativi all'utente.
-     * in caso di fallimento verrà rretituito false o -1.
+     * in caso di fallimento verrà restituito false o -1.
      */
     public function check()
     {
