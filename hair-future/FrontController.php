@@ -16,15 +16,15 @@ class FrontController
 
     public function __construct()
     {
-        $this->json = new VJson();
+        $this->json = new VFrontController();
         $this->parseUri();
     }
 
     public function parseUri()
     {
         $dati = $this->json->ricevi();
-        $this->controller = $dati['richiesta']['controller'];
-        $this->metodo=$dati['richiesta']['metodo'];
+        $this->controller = $this->json->riceviController();
+        $this->metodo = $this->json->riceviMetodo();
         //print_r($this->controller);
         //print_r($this->task);
 
@@ -53,10 +53,10 @@ class FrontController
                 $this->controller->{$this->metodo}();
                 }
                 else {
-                echo "Non è stato trovato il task";
+                echo $this->json->invia("Non è stato trovato il task");
             } }
             else {
-                echo "controller not found";
+                echo $this->json->invia("controller not found");
             }
         }
 }
