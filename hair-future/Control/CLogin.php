@@ -48,12 +48,7 @@ class CLogin
      */
     public function effettuaLogout()
     {
-        $Mercurio = new VLogin();
-        $comando = $Mercurio->effettuaLogout();
-        if ($comando)
-        {
-            $session = USingleton::getInstance('CSession');
-            $session->__destroy();
-        }
+        $session = USingleton::getInstance('CSession');
+        $session->__destroy();
     }
 }
