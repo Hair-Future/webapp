@@ -21,22 +21,30 @@ class ECatalogoAppuntamenti
             $this->catalogo[] = $appuntamento->loadByValori($row);
         }
     }
-    /**
-     * @param $data
-     * @param $ora
-     * @param $listaServizi
-     * @return int
-     *
-     * metodo che riceve una data in formato 'Y-m-d', e l'ora in formato 'H:i:s'
-     */
-    private function controllaPossibilitaPrenotazione($data, $ora, $listaServizi)
+
+    private function calcolaDurataListaServizi($listaServizi)
     {
-        $startTime = strtotime($data." ".$ora);
         $durata = 0;
         foreach ($listaServizi as $servizio)
         {
             $durata += $servizio->getDurata();
         }
+        return $durata;
+    }
+    /**
+     * controlla che l'appuntamento richiesto (la combinzaione $data, $ora, $listaServizi ne costruirà uno)
+     * non verrà sovrapposto con un altro
+     * @param $data
+     * @param $ora
+     * @param $listaServizi
+     * @return int -1 fallimento, 0 successo
+     *
+     * metodo che riceve una data in formato 'Y-m-d', e l'ora in formato 'H:i:s'
+     */
+    private function controllaNoSovrapposizione($data, $ora, $listaServizi)
+    {
+        $startTime = strtotime($data." ".$ora);
+        $durata = $this->calcolaDurataListaServizi($listaServizi);
 
         $endTime = $startTime + (($durata)*60);
         $listaAppuntamenti = $this->searchAppuntamentoByData($data);
@@ -56,6 +64,52 @@ class ECatalogoAppuntamenti
         return 0;
     }
 
+    /**
+     * controlla che l'appuntamento richiesto (la combinzaione $data, $ora, $listaServizi ne costruirà uno)
+     * sia nell'orario di apertura
+     * @param $data
+     * @param $ora
+     * @param $listaServizi
+     * @return int -1: fallimento, 0:successo.
+     */
+    private function inOrarioApertura($data, $ora, $listaServizi)
+    {
+        $orarioApertura = new EOrarioApertura();
+        $giorno = $orarioApertura->getGiorno($data);
+
+        $inizioListaServizi = strtotime($data." ".$ora);
+        $fineListaServizi = $inizioListaServizi + $this->calcolaDurataListaServizi($listaServizi)*60;
+
+        $aperturaMattina = strtotime($data." ".$giorno->getAperturaMattina());
+        $chiusuraMattina = strtotime($data." ".$giorno->getChiusuraMattina());
+        $aperturaPomeriggio = strtotime($data." ".$giorno->getAperturaPomeriggio());
+        $chiusuraPomeriggio = strtotime($data." ".$giorno->getChiusuraPomeriggio());
+
+        if (($aperturaMattina > $inizioListaServizi) ||
+            ($chiusuraPomeriggio < $fineListaServizi) ||
+            (($inizioListaServizi <= $chiusuraMattina) && ($fineListaServizi > $chiusuraMattina)) ||
+            (($inizioListaServizi < $aperturaPomeriggio) && ($fineListaServizi >= $aperturaPomeriggio)) ||
+            (($inizioListaServizi >= $chiusuraMattina) && ($fineListaServizi <= $aperturaPomeriggio)))
+            return -1;
+        else
+            return 0;
+    }
+
+    /**
+     * controlla che l'appuntamento sia prenotabile
+     * @param $data
+     * @param $ora
+     * @param $listaServizi
+     * @return int -1: fallimento, 0:successo.
+     */
+    private function controllaPossibilitaPrenotazione($data,$ora,$listaServizi)
+    {
+        if (($this->inOrarioApertura($data,$ora,$listaServizi) == 0) &&
+            ($this->controllaNoSovrapposizione($data,$ora,$listaServizi) == 0))
+            return 0;
+        else
+            return -1;
+    }
     /**
      * ECatalogoAppuntamenti constructor.
      */
@@ -210,7 +264,6 @@ class ECatalogoAppuntamenti
         $date = new DateTime($dataInizio);
         for ($i = 0; $i < $numGiorni; $i++)
         {
-            $date->modify('+1 day');
             $giorno = $this->searchAppuntamentoByData($date->format('Y-m-d'));
             if (($giorno))
             {
@@ -219,6 +272,7 @@ class ECatalogoAppuntamenti
                     $appuntamenti[] = $appuntamento;
                 }
             }
+            $date->modify('+1 day');
         }
         return $appuntamenti;
     }
@@ -227,7 +281,7 @@ class ECatalogoAppuntamenti
      * @param $data: date(Y-m-d)
      * @return array
      */
-    public function ottieniIntervalliOccupati($numGiorni, $data)
+    public function ottieniIntervalliOccupati($data, $numGiorni)
     {
         $appuntamenti = $this->ottieniAppuntamentiPeriodo($data, $numGiorni);
         $intervalli = array();
@@ -239,27 +293,60 @@ class ECatalogoAppuntamenti
         return $intervalli;
     }
 
-    public function ottieniIntervalliNonPrenotabili($numGiorni, $data, $durataAppuntamento)
+    private function ottieniIntervalliPrenotabiliMattinaOppurePomeriggio($data, $durataAppuntamento, $mattinaPomeriggio)
     {
-        $intervalli = $this->ottieniIntervalliOccupati($numGiorni, $data);
-        $nonPrenotabili = array();
+        $orarioApertura = new EOrarioApertura();
+        $giorno = $orarioApertura->getGiorno($data);
+        $intervalli = $this->ottieniIntervalliOccupati($data, 1);
         $durata = $durataAppuntamento*60;
-        //strtotime($data." ".$ora)
-        foreach ($intervalli as $giorno=>$lista)
+
+        $prenotabili = [];
+        $fineIntervalloPrec = $giorno->{"getApertura".$mattinaPomeriggio}();
+        foreach ($intervalli as $item)
         {
-            $nonPrenotabili[$giorno][] = $lista[0];
-            for ($i = 1; $i < sizeof($lista); $i++)
+            foreach ($item as $intervallo)
             {
-                $libero = strtotime($giorno." ".$lista[$i]['inizioIntervallo'])-strtotime($giorno." ".$lista[$i-1]['fineIntervallo']);
-                if ($durata > $libero)
+                if (strtotime($intervallo["inizioIntervallo"]) >= strtotime($fineIntervalloPrec))
                 {
-                    $nonPrenotabili[$giorno][] = array('inizioIntervallo'=>$lista[$i-1]['fineIntervallo'],
-                        'fineIntervallo'=>$lista[$i]['inizioIntervallo']);
+                    if (strtotime($intervallo["inizioIntervallo"]) < strtotime($giorno->{"getChiusura".$mattinaPomeriggio}()))
+                        $libero = strtotime($intervallo["inizioIntervallo"]) - strtotime($fineIntervalloPrec);
+                    $numIntervalli = floor($libero/$durata);
+                    for ($i = 0; $i<$numIntervalli; $i++)
+                    {
+                        $prenotabili[] = $fineIntervalloPrec;
+                        $fineIntervalloPrec = date('H:i:s', strtotime('+'.$durataAppuntamento.' min', strtotime($fineIntervalloPrec)));
+                    }
+                    //if (strtotime($giorno->{"getChiusura".$mattinaPomeriggio}()) > strtotime($intervallo["fineIntervallo"]))
+                        $fineIntervalloPrec = $intervallo["fineIntervallo"];
                 }
-                $nonPrenotabili[$giorno][] = $lista[$i];
             }
         }
-        return $nonPrenotabili;
+        if (strtotime($giorno->{"getChiusura".$mattinaPomeriggio}()) >= strtotime($fineIntervalloPrec))
+        {
+            $libero = strtotime($giorno->{"getChiusura".$mattinaPomeriggio}()) - strtotime($fineIntervalloPrec);
+            $numIntervalli = floor($libero/$durata);
+            for ($i = 0; $i<$numIntervalli; $i++)
+            {
+                $prenotabili[] = $fineIntervalloPrec;
+                $fineIntervalloPrec = date('H:i:s', strtotime('+'.$durataAppuntamento.' min', strtotime($fineIntervalloPrec)));
+            }
+        }
+        return $prenotabili;
+    }
+
+    public function ottieniIntervalliPrenotabili($data, $numGiorni, $durataAppuntamento)
+    {
+        $date = new DateTime($data);
+        $prenotabili = array();
+        for ($i = 0; $i < $numGiorni; $i++)
+        {
+            $prenotabili[$date->format('Y-m-d')]['mattina'] =
+                $this->ottieniIntervalliPrenotabiliMattinaOppurePomeriggio($date->format('Y-m-d'), $durataAppuntamento, 'Mattina');
+            $prenotabili[$date->format('Y-m-d')]['pomeriggio'] =
+                $this->ottieniIntervalliPrenotabiliMattinaOppurePomeriggio($date->format('Y-m-d'), $durataAppuntamento, 'Pomeriggio');
+            $date->modify('+1 day');
+        }
+        return $prenotabili;
     }
 
     public function segnaEffettuato($codice)

@@ -39,6 +39,19 @@ class EOrarioApertura
     }
 
     /**
+     * riceve in input una data in output retituisce un EGiorno corrispondente al giorno della settimana di tale data
+     * @param $data
+     * @return mixed
+     */
+    public function getGiorno($data)
+    {
+        $settimanaEngIta = array('Mon'=>'Lunedì','Tue'=>'Martedì','Wed'=>'Mercoledì',
+            'Thu'=>'Giovedì','Fri'=>'Venerdì','Sat'=>'Sabato','Sun'=>'Domenica');
+        $dayWeek = date('D', strtotime($data));
+        return $this->listaGiorni[$settimanaEngIta[$dayWeek]];
+    }
+
+    /**
      * @return array
      */
     public function getListaGiorni()
