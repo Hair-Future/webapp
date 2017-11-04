@@ -257,7 +257,11 @@ class ECatalogoAppuntamenti
         return -1;
     }
 
-
+    /**
+     * @param $dataInizio
+     * @param $numGiorni
+     * @return array
+     */
     public function ottieniAppuntamentiPeriodo($dataInizio, $numGiorni)
     {
         $appuntamenti = array();
@@ -275,6 +279,22 @@ class ECatalogoAppuntamenti
             $date->modify('+1 day');
         }
         return $appuntamenti;
+    }
+
+    /**
+     * @param $dataInizio
+     * @param $numGiorni
+     * @return array
+     */
+    public function ottieniAppuntamentiPeriodoInArray($dataInizio, $numGiorni)
+    {
+        $appuntamenti = $this->ottieniAppuntamentiPeriodo($dataInizio, $numGiorni);
+        $dati = array();
+        foreach ($appuntamenti as $appuntamento)
+        {
+            $dati[] = $appuntamento->convertiInArray();
+        }
+        return $dati;
     }
     /**
      * @param $numGiorni
@@ -352,14 +372,21 @@ class ECatalogoAppuntamenti
     public function segnaEffettuato($codice)
     {
         $appuntamento = $this->searchAppuntamentoByCodice($codice);
-        $appuntamento->effettuato();
+        return $appuntamento->effettuato();
     }
 
     public function segnaEffettuati(array $codici)
     {
+        $check = true;
         foreach ($codici as $codice)
         {
-            $this->segnaEffettuato($codice);
+            if ($check)
+            {
+                $check = $this->segnaEffettuato($codice);
+            }
+            else
+                return -1;
         }
+        return 0;
     }
 }

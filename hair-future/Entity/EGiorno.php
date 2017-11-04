@@ -41,6 +41,17 @@ class EGiorno
         return $this;
     }
 
+    public function convertiInArray()
+    {
+        $dati = array();
+        $dati['giorno'] = $this->nome;
+        $dati['aperturaMattina'] = $this->aperturaMattina;
+        $dati['chiusuraMattina'] = $this->chiusuraMattina;
+        $dati['aperturaPomeriggio'] = $this->aperturaPomeriggio;
+        $dati['chiusuraPomeriggio'] = $this->chiusuraPomeriggio;
+        return $dati;
+    }
+
     /**
      * @return string
      */

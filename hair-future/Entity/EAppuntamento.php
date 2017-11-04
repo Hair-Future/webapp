@@ -215,7 +215,7 @@ class EAppuntamento{
     public function effettuato()
     {
         $Caronte = new FAppuntamento();
-        $Caronte->done($this->codice);
+        return $Caronte->done($this->codice);
     }
 
     public function convertiInArray()

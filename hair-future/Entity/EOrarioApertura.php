@@ -24,6 +24,16 @@ class EOrarioApertura
         $this->carica();
     }
 
+    public function convertiInArray()
+    {
+        $dati = array();
+        foreach ($this->listaGiorni as $giorno)
+        {
+            $dati[$giorno->getGiorno] = $giorno->covertiInArray();
+        }
+        return $dati;
+    }
+
     /**
      * @param $valori
      * @return int
@@ -58,5 +68,4 @@ class EOrarioApertura
     {
         return $this->listaGiorni;
     }
-
 }
