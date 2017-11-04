@@ -41,8 +41,10 @@ class CPrenotazione
         $numeroGiorni =$Mercurio->riceviNumeroGiorni();
 
         $durata = $session->leggiValore('durataListaServiziAttuale');
-        $intervalli = $catalogoAppuntamenti->ottieniIntervalliNonPrenotabili($numeroGiorni, $data, $durata);
+        $intervalli = $catalogoAppuntamenti->ottieniIntervalliPrenotabili($data, $numeroGiorni, $durata);
 
         $Mercurio->inviaDatiCalendario($durata, $intervalli);
     }
+
+
 }
