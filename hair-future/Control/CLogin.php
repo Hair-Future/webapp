@@ -19,10 +19,9 @@ class CLogin
 
         $sessione = USingleton::getInstance('CSession');
         $sessione->Session();
-        $sessione->impostaValore('email', $email);
-        $sessione->impostaValore('password', $password);
 
         $utente = EGestoreUtenti::autenticaUtente($email, $password);
+        $sessione->impostaValore('utente', $utente);
 
         $Mercurio->inviaUtente($utente);
     }
@@ -37,8 +36,7 @@ class CLogin
         $Mercurio = new VLogin();
         $sessione = USingleton::getInstance('CSession');
 
-        $email = $sessione->leggiValore('email');
-        $utente = EGestoreUtenti::ottieniUtenteByID($email);
+        $utente = $sessione->leggiValore('utente');
 
         $Mercurio->inviaUtente($utente);
     }
