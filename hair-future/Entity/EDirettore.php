@@ -60,12 +60,12 @@ class EDirettore extends EUtente
     //fatti per conto di un cliente
     public function prenotaAppuntamento($email, $listaServizi, $data, $ora)
     {
-        parent::prenotaAppuntamento($email, $listaServizi, $data, $ora);
+        return parent::prenotaAppuntamento($email, $listaServizi, $data, $ora);
     }
 
     public function modificaAppuntamento($id, $data, $ora, $email)
     {
-        return parent::modificaAppuntamento($id, $data, $ora, $email);
+        parent::modificaAppuntamento($id, $data, $ora, $email);
     }
 
     public function cancellaAppuntamento($id, $email)

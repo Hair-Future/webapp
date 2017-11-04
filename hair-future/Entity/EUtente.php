@@ -189,7 +189,7 @@ abstract class EUtente
     public function prenotaAppuntamento($email, $listaServizi, $data, $ora)
     {
         $catalogo = USingleton::getInstance('ECatalogoAppuntamenti');
-        $catalogo->prenotaAppuntamento($email, $listaServizi, $data, $ora);
+        return $catalogo->prenotaAppuntamento($email, $listaServizi, $data, $ora);
     }
 
     /**
@@ -219,7 +219,7 @@ abstract class EUtente
      * @return array
      *
      */
-    public function ottieniListaServizi($email)
+    public function ottieniListaAppuntamenti($email)
     {
         $catalogo = USingleton::getInstance('ECatalogoAppuntamenti');
         return $catalogo->searchAppuntamentoByUtente($email);
