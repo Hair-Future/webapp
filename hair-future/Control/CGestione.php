@@ -30,7 +30,7 @@ class CGestione
         $Mercurio = new VGestione();
         $orarioArray = $Mercurio->riceviOrario();
         $orario = new EOrarioApertura();
-        $check = $orario->modificaGiorno($orarioArray);
+        $check = $orario->modificaGiorni($orarioArray);
         $Mercurio->invia($check);
     }
 

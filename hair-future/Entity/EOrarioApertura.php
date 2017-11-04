@@ -48,6 +48,18 @@ class EOrarioApertura
             return -1;
     }
 
+    public function modificaGiorni($giorni)
+    {
+        $check = true;
+        foreach ($giorni as $giorno)
+        {
+            if ($check)
+                $check = $this->modificaGiorno($giorno);
+            else
+                return -1;
+        }
+    }
+
     /**
      * riceve in input una data in output retituisce un EGiorno corrispondente al giorno della settimana di tale data
      * @param $data
