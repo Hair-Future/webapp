@@ -28,7 +28,7 @@ class VGestione extends VJson
     public function riceviOrario()
     {
         $dati = $this->ricevi();
-        return $dati['dati']['nuovoOrario'];
+        return $dati['dati'];
     }
 
     public function riceviInizioPeriodo()
