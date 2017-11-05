@@ -101,16 +101,18 @@ $(document).ready(function() {
     function FormattaDatiDaInviare () {
 
         dati= new Array();
+
         for (i in giorni)
         {
             day= {
                     giorno: giorni[i],
-                    aperturaMattina: $("#"+i+"-matt-dalle").val(),
-                    chiusuraMattina: $("#"+i+"-matt-alle").val(),
-                    aperturaPomeriggio: $("#"+i+"-pom-dalle").val(),
-                    chiusuraPomeriggio: $("#"+i+"-pom-alle").val()
+                    aperturaMattina: $("#"+i+"-matt-dalle").val()+":00",
+                    chiusuraMattina: $("#"+i+"-matt-alle").val()+":00",
+                    aperturaPomeriggio: $("#"+i+"-pom-dalle").val()+":00",
+                    chiusuraPomeriggio: $("#"+i+"-pom-alle").val()+":00"
             };
-            dati=dati.concat(day);
+            dati[giorni[i]]=day;
+            //dati=dati.concat(day);
             console.log(dati);
         }
 
