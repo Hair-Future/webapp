@@ -19,6 +19,7 @@ class EDirettore extends EUtente
         return "Direttore";
     }
 
+    //gestione servizi
     public function creaServizio($nome, $descrizione, $prezzo, $durata, $categoriaInCuiAllocarlo)
     {
         $catalogoServizi = new ECatalogoServizi();
@@ -57,16 +58,43 @@ class EDirettore extends EUtente
         $catalogoServizi->rimuoviCategoria($nome);
     }
 
+    //modifica degli orari
     public function modificaOrario($orarioArray)
     {
         $orario = new EOrarioApertura();
         return $orario->modificaGiorni($orarioArray);
     }
 
+    //scrittura appuntamenti effettuati
     public function segnaAppuntamentiEffettuati($effettuati)
     {
         $catalogo = USingleton::getInstance('ECatalogoAppuntamenti');
         return $catalogo->segnaEffettuati($effettuati);
+    }
+
+    //statistiche
+    public function maxSpesaUtente($dataInizio, $dataFine)
+    {
+        $statistiche = new EStatistiche();
+        return $statistiche->maxSpesaUtente($dataInizio, $dataFine);
+    }
+
+    public function guadagno($dataInizio, $dataFine)
+    {
+        $statistiche = new EStatistiche();
+        return $statistiche->guadagno($dataInizio, $dataFine);
+    }
+
+    public function serviziApplicati($dataInizio, $dataFine)
+    {
+        $statistiche = new EStatistiche();
+        return $statistiche->serviziApplicati($dataInizio, $dataFine);
+    }
+
+    public function appuntamentiMancati($dataInizio, $dataFine)
+    {
+        $statistiche = new EStatistiche();
+        return $statistiche->appuntamentiMancati($dataInizio, $dataFine);
     }
 
     //fatti per conto di un cliente

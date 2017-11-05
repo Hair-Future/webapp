@@ -60,7 +60,7 @@ class CGestione
             $check = $utente->segnaAppuntamentiEffettuati($effettuati);
         else
             $check = -1;
-        
+
         $Mercurio->invia($check);
     }
 }
