@@ -58,6 +58,7 @@ class EOrarioApertura
             else
                 return -1;
         }
+        return 0;
     }
 
     /**
