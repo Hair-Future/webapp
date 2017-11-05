@@ -92,25 +92,30 @@ $(document).ready(function() {
             dati:dati}),
         function (prenotabili)
         {
+            //durata diventa numero di "mezz'ore"
             $(".result").html(prenotabili);
             durata=prenotabili.durata/30;
-            inserisciIntervalliDisponibili(2, prenotabili.intervalli);
+
+            //formattazione delle date ricevute secondo le date e gli orari qui definiti
+            for (i in prenotabili.intervalli)
+            {
+                giorno=prenotabili.intervalli[i];
+                for ( j in giorno ) {
+                    ora=giorno[j];
+                    ore=parseInt(ora.substr(0,2));
+                    if (ora.substr(3,2)=='30') {prenotabili.intervalli[i][j]=ore+"50"}
+                    else {prenotabili.intervalli[i][j]=ore+"00"};
+                }
+            }
+
+            inserisciIntervalliDisponibili(durata, prenotabili.intervalli);
         },
         "json"
     );
 
     //supponiamo di ricevere i seguenti orari prenotabili
-    function inserisciIntervalliDisponibili(durata, intervalli)
+    function inserisciIntervalliDisponibili(durata, dateDisp)
     {
-        date=intervalli;
-        console.log(intervalli);
-
-        dateDisp = {
-            "2017-11-04": {0: "1050", 1: "1250"},
-            "2017-11-06": {0: "1400", 1: "1700"},
-            "2017-11-05": {0: "1050", 1: "1700"},
-            "2017-11-07": {0: "950", 1: "1200"}
-        };
 
         //inserimento appuntamenti disponibili
         for (data in dateDisp) {
@@ -139,13 +144,38 @@ $(document).ready(function() {
         }
     }
 
-    $(".orario").click(function() {
-        console.log(getInformazioni(this.id));
-    });
 
-    //rendere lo sfondo grigio alle caselle delle 11:00
-    // x=document.querySelectorAll('[id^="1100"]');
-    // for (i in x)  {x[i].style.backgroundColor="#969696";}
+
+    $(".orario").click(function() {
+        info=getInformazioni(this.id);
+        oraIn=info.ora;
+        giornoApp=info.anno+"-"+(parseInt(info.mese)+1)+"-"+info.giorno;
+        //dati da inviare al server per salvare la prenotazione
+        var richiesta1= {
+            controller: "CPrenotazione",
+            metodo: "effettuaPrenotazione"
+        };
+
+        var dati1=
+            {
+                oraInizioAppuntamento: orari[oraIn]+":00",
+                dataAppuntamento: giornoApp
+        };
+
+        console.log(getInformazioni(this.id));
+        $.post(indirizzo,
+            JSON.stringify(
+                {
+                    richiesta: richiesta1,
+                    dati:dati1
+                }),
+            function (risp)
+            {
+                $(".result").html(risp);
+            },
+            "json"
+        );
+    });
 
 });
 
@@ -178,12 +208,4 @@ function convertiInDataJs (dataPhp)
     dataJs.setMonth(x[1]-1);
     dataJs.setDate(x[2]);
     return dataJs;
-}
-
-function convertiInCodice (oraPhp)
-{
-    var ora=oraPhp.split(":");
-    if (ora[1]==30) {ora[1]=50;}
-    codice=""+ora[0]+""+ora[1];
-    return codice;
 }

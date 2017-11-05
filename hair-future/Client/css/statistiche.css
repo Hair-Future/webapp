@@ -1,0 +1,60 @@
+#inizio_form{
+    margin-top: 90px;
+}
+
+.sfondo_grigio{
+    background-color: rgba(255, 255, 255, 0.7);
+    border-radius: 10px;
+    margin-top: 90px;
+}
+.glyphicon {display: inline;}
+
+#via { margin-top: 30px;
+        margin-bottom: 15px;}
+
+label {
+    margin-top:20px;
+    margin-bottom: 5px;
+    font-size: 15px;
+}
+
+.ris
+{
+    margin-top:20px;
+    margin-bottom: 10px;
+    font-size: 20px;
+}
+
+.title {
+    margin-top:20px;
+    margin-bottom: 5px;
+    font-size: 15px;
+}
+
+select {
+    height: 25px;
+    display: block;
+}
+
+input {
+    display: block;
+}
+
+.option {
+    /*padding-left: 20px;*/
+    height:5px;
+}
+.sfondo{
+    background: url("../img/statistic23.jpg");
+    background-size:     cover;
+    background-repeat:   no-repeat;
+    background-position: center top;  }
+
+
+.semi-square {
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+}
+
+

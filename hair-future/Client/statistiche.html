@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Statistiche</title>
+    <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/page_style.css">
+    <link rel="stylesheet" href="css/statistiche.css">
+
+</head>
+<body class="sfondo">
+
+<div id="box" class="row">
+    <div class="col-sm-5 sfondo_grigio">
+        <div>
+            <label for="scegli_statistica">Scegli una statistica da visualizzare</label><span class="glyphicon glyphicon-chart"></span>
+            <select id="scegli_statistica" class="semi-square">
+                <option value="guadagno"> Ricavo</option>
+                <option value="serviziApplicati"> Percentuale dei servizi applicati</option>
+                <option value="maxSpesaUtente"> Utente che ha speso di più</option>
+                <option value="appuntamentiMancati"> Assenze agli appuntamenti</option>
+            </select>
+        </div>
+        <div >
+            <label for="giorno_inizio">Scegli un giorno di inizio</label>
+            <input id="giorno_inizio" type="date" class="semi-square" name="giorno_inizio">
+        </div>
+
+        <div >
+            <label for="giorno_fine">Scegli un giorno di fine</label>
+            <input id="giorno_fine" type="date" class="semi-square" name="giorno_fine">
+        </div>
+
+        <div >
+            <button type="button" class="btn btn-default btn-colored" id="via">Visualizza</button>
+        </div>
+    </div>
+    <div class="col-sm-1">
+</div>
+
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script src="bootstrap/js/bootstrap.min.js"></script>
+<script src="js/navbar.js"></script>
+<script src="js/statistiche.js"></script>
+
+
+</body>
+</html>

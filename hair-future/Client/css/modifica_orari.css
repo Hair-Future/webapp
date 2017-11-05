@@ -3,13 +3,19 @@
     margin-top: 70px;
     margin-bottom: 20px;
     align-content:center;
+    background-color: rgba(243, 236, 255, 0.8);
+    border-radius: 7px;
+}
+
+#contenuto {
+
 }
 
 .sfondo{
-    background: url("../img/modifica_ora.jpg");
+    background: url("../img/modifica_ora1.jpg");
     background-size:     cover;
     background-repeat:   no-repeat;
-    background-position: center top;
+    background-position: center center;
 }
 
 .title{

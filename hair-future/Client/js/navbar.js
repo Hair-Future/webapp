@@ -29,7 +29,8 @@ $(document).ready(function() {
         '<li><a class="btn-default active" id="home" href="index.html">Home</a></li>' +
         '<li><a class="btn-default active" data-toggle="modal" data-target="#myModal" href="" id="login">Log In</a></li>' +
         '<li><a class="btn-default active" id="logout">Log Out</a></li>' +
-        '<li><a class="btn-default active" id="modifica_orari" href="modifica_orari.html">Modifica Orario</a></li>' +
+        '<li><a class="btn-default active" id="modifica_orari" href="modifica_orari.html">Modifica Orario</a></li>'+
+        '<li><a class="btn-default active" id="statistiche" href="statistiche.html">Statistiche</a></li>'+
         '<li><a class="btn-default active" id="registrati" href="registrazione.html">Registrati</a></li>' +
         //'<!--<li><a class="btn btn-default active" href="#" role="button" id="btn-nav">Prenota</a></li> -->' +
         '<li><a class=" btn-default active" id="prenota" href="scelta_servizi.html">' +
@@ -42,11 +43,12 @@ $(document).ready(function() {
 
         '</div><!-- /.container-fluid -->' +
         '</nav>';
-    $("body").append(htmlNavbar);
-    $("#login").hide();
-    $("#registrati").hide();
-    $("#logout").hide();
-    $("#modifica_orari").hide();
+        $("body").append(htmlNavbar);
+        $("#login").hide();
+        $("#registrati").hide();
+        $("#logout").hide();
+        $("#modifica_orari").hide();
+        $("#statistiche").hide();
 
 
     $.post
@@ -68,13 +70,16 @@ $(document).ready(function() {
                 document.getElementById("login_effettuato").append("Sei connesso come " + utente.nome +" "+ utente.cognome);
                 $("#logout").show();
 
-                if(utente.tipo=='Direttore') //se l'utente connesso è un direttore pò anche modificare gli orari
-                { $("#modifica_orari").show();}
+                if(utente.tipo=='Direttore')
+                    //se l'utente connesso è un direttore pò anche modificare gli orari, vedere le statistiche
+                { $("#modifica_orari").show();
+                    $("#statistiche").show();}
 
             }
-            else { //se non c'è login mostriamo login e registrati
+            else { //se non c'è login mostriamo login, registrati
                 $("#login").show();
                 $("#registrati").show();
+                $('#prenota').click(function () {});
             }
         },
         "json"
