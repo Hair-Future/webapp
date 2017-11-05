@@ -33,7 +33,7 @@ class EStatistiche
         foreach ($risultati as $key=>$spesa){
             if($spesa > $max){
                 $max = $spesa;
-                $result = $key;
+                $result = EGestoreUtenti::ottieniUtenteByID($key)'';
             }
         }
         /*$utente = $gestoreUtenti->ottieniUtenteByID($result);
