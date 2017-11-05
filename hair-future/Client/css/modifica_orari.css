@@ -1,0 +1,118 @@
+
+#tabella{
+    margin-top: 70px;
+    margin-bottom: 20px;
+    align-content:center;
+}
+
+.sfondo{
+    background: url("../img/modifica_ora.jpg");
+    background-size:     cover;
+    background-repeat:   no-repeat;
+    background-position: center top;
+}
+
+.title{
+    font-size: 20px;
+    color: #a311e3;
+
+}
+
+#salva_orari{
+    float:right;
+}
+
+td {
+    background-color: rgba(236, 26, 219, 0);
+    text-align: center;
+}
+.bigger
+{
+    margin-top:7px;
+    font-size: 15px;
+    text-align: center;
+    font-weight: 700;
+}
+
+.campoform
+{
+    margin-bottom: 5px;
+    margin-top: 5px;
+    float: right;
+}
+.form-control
+{
+    display: inline;
+    height: 100%;
+    width: 50%;
+    padding: 6px 12px;
+    font-size: 14px;
+    line-height: 1.42857143;
+    color: #555;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-left: 5px;
+    float: right;
+
+}
+.scrollbar
+{
+    float: left;
+    background-color: rgba(77, 32, 255, 0);
+    overflow-y: scroll;
+}
+
+.colonna {
+    background-color: rgba(189, 52, 227, 0.28);
+}
+
+.force-overflow
+{
+    min-height: 450px;
+}
+
+.stylescroll::-webkit-scrollbar-track
+{
+    -webkit-box-shadow: inset 0 0 6px rgba(255, 255, 255, 0);
+    border-radius: 10px;
+    background-color: #F5F5F5;
+}
+
+.stylescroll::-webkit-scrollbar
+{
+    width: 12px;
+    background-color: #F5F5F5;
+}
+
+.stylescroll::-webkit-scrollbar-thumb
+{
+    border-radius: 10px;
+    -webkit-box-shadow: inset 0 0 6px rgba(163, 17, 227, 0.47);
+    background-color: rgba(163, 17, 227, 0.72);
+}
+
+table.calendar {
+    margin-bottom: 0;
+}
+
+table.calendar > thead > tr > th {
+    text-align: center;
+}
+
+table.calendar > tbody > tr > td {
+    height: 20px;
+}
+
+table.calendar > tbody > tr > td > div {
+    padding: 8px;
+    height: 40px;
+    overflow: hidden;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+
+table.table-borderless > thead > tr > th, table.table-borderless > tbody > tr > td {
+    border: 0;
+}
+

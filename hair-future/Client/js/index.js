@@ -4,6 +4,7 @@
 $(document).ready(function() {
     indirizzo='../index.php';
 
+
     $('#accedi').click(function () {
 
         var email = $('#email').val();

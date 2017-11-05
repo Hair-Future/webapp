@@ -45,6 +45,36 @@ $(document).ready(function() {
     // formattare il giorno in base alla classe data di php nel formato Y-m-d
     dataphp=convertiInDataPhp(oggi);
 
+    testo="";
+    //Creazione dinamica della prima settimana
+    testo=+testo+'<thead> <tr id="giorni"> <th><span class="glyphicon glyphicon-chevron-left"></span></th>'; //&nbsp;
+
+    // creazione barra in cui sono segnati i giorni a partire da oggi
+    for (i=0;i<7;i++)
+    {
+        giorno=new Date(oggi.getTime()+86400000*i);
+        testo=testo+'<th width="14%">'+giorni[giorno.getDay()]+'<br>'+giorno.getDate()+' '+mesi[giorno.getMonth()]+'</th>';
+    }
+    testo=testo+'<th><span class="glyphicon glyphicon-chevron-right"></span></th></tr></thead> <tbody id="iniziotabella">';
+
+    // creazione caselle a cui vengono associati degli id in base alle loro caratteristiche (giorno, ora,...)
+    for (j in orari)
+    {
+        testo=testo+"<tr><td class='colonna'>"+orari[j]+"</td>";
+        for (i=0;i<7;i++)
+        {
+            giorno=new Date(oggi.getTime()+86400000*i);
+            //id di una casella: codiceOrario|Giorno|Mese|Anno
+            testo = testo + '<td id="'+j+'|'+giorno.getDate()+'|'+giorno.getMonth()+'|'+giorno.getFullYear()+'" class="orario '+giorno.getDay()+'" rowspan="1"></td>'
+        }
+        testo=testo+"<td class='colonna'>"+orari[j]+"</td>";
+        testo=testo+"</tr>";
+    }
+
+    testo=testo+ "</tbody>";
+    $('#calendario').append(testo);
+
+
     //dati da inviare al server per conoscere la disponibilità
     var richiesta= {
         controller: "CPrenotazione",
@@ -60,77 +90,54 @@ $(document).ready(function() {
         JSON.stringify(
             {richiesta: richiesta,
             dati:dati}),
-        function (dati)
+        function (prenotabili)
         {
-            for (i in dati.intervalli)
-            {   console.log(i);
-                for (j in dati.intervalli.i) {console.log(j);}
-            }
+            $(".result").html(prenotabili);
+            durata=prenotabili.durata/30;
+            inserisciIntervalliDisponibili(2, prenotabili.intervalli);
         },
         "json"
     );
-    testo="";
 
     //supponiamo di ricevere i seguenti orari prenotabili
-    durata=90;
-    durata=durata/30;
-
-    dateDisp= {
-        "2017-11-4": {0: "1000", 1: "1250" },
-        "2017-11-3": { 0: "1400", 1: "1700" },
-        "2017-11-5": { 0: "1050", 1: "1700" }
-        }
-
-
-    //Creazione dinamica della prima settimana
-    testo=+testo+'<thead> <tr id="giorni"> <th>&nbsp;</th>';
-
-    // creazione barra in cui sono segnati i giorni a partire da oggi
-    for (i=0;i<7;i++)
+    function inserisciIntervalliDisponibili(durata, intervalli)
     {
-        giorno=new Date(oggi.getTime()+86400000*i);
-        testo=testo+'<th width="14%">'+giorni[giorno.getDay()]+'<br>'+giorno.getDate()+' '+mesi[giorno.getMonth()]+'</th>';
-    }
-    testo=testo+'</tr></thead> <tbody id="iniziotabella">';
+        date=intervalli;
+        console.log(intervalli);
 
-    // creazione caselle a cui vengono associati degli id in base alle loro caratteristiche (giorno, ora,...)
-    for (j in orari)
-    {
-        testo=testo+"<tr><td class='colonna'>"+orari[j]+"</td>";
-        for (i=0;i<7;i++)
-        {
-            giorno=new Date(oggi.getTime()+86400000*i);
-            //id di una casella: codiceOrario|Giorno|Mese|Anno
-            testo = testo + '<td id="'+j+'|'+giorno.getDate()+'|'+giorno.getMonth()+'|'+giorno.getFullYear()+'" class="orario '+giorno.getDay()+'" rowspan="1"></td>'
-        }
-        testo=testo+"</tr>";
-    }
+        dateDisp = {
+            "2017-11-04": {0: "1050", 1: "1250"},
+            "2017-11-06": {0: "1400", 1: "1700"},
+            "2017-11-05": {0: "1050", 1: "1700"},
+            "2017-11-07": {0: "950", 1: "1200"}
+        };
 
-    testo=testo+ "</tbody>";
-    $('#calendario').append(testo);
-
-
-    for (data in dateDisp)
-    {
-        for (i in dateDisp[data])
-        {
-            datajs = convertiInDataJs(data);
-            elem = document.getElementById(''+dateDisp[data][i]+'|'+datajs.getDate()+'|'+datajs.getMonth()+'|'+datajs.getFullYear()+'');
-            elem.classList.add('has-events');
-            elem.rowSpan = durata;
-            elem.style.backgroundColor = "#a311e3";
-            for (j=1;j<durata;j++)
-            {
-                elimina = document.getElementById('' +
-                    (parseInt(dateDisp[data][i])+(50*j)) + '|' +
-                    datajs.getDate() + '|' +
-                    datajs.getMonth() + '|' +
-                    datajs.getFullYear() + '');
-                elimina.remove();
+        //inserimento appuntamenti disponibili
+        for (data in dateDisp) {
+            for (i in dateDisp[data]) {
+                datajs = convertiInDataJs(data);
+                elem = document.getElementById('' + dateDisp[data][i] + '|' + datajs.getDate() + '|' + datajs.getMonth() + '|' + datajs.getFullYear() + '');
+                elem.classList.add('has-events');
+                elem.rowSpan = durata;
+                elem.style.backgroundColor = "#a311e3";
+                descrizione = "";
+                descrizione = '<div class="row-fluid lecture" style="width: 99%; height: 100%;">' +
+                    '<span class="title">Prenota per il</span>' +
+                    '<span class="location">' + datajs.getDate() + '-' + (datajs.getMonth() + 1) + '-' + datajs.getFullYear() + '</span>' +
+                    '<span class="location">alle ' + orari[dateDisp[data][i]] + '</span>' +
+                    '</div>';
+                $(elem).append(descrizione);
+                for (j = 1; j < durata; j++) {
+                    elimina = document.getElementById('' +
+                        (parseInt(dateDisp[data][i]) + (50 * j)) + '|' +
+                        datajs.getDate() + '|' +
+                        datajs.getMonth() + '|' +
+                        datajs.getFullYear() + '');
+                    elimina.remove();
+                }
             }
         }
     }
-
 
     $(".orario").click(function() {
         console.log(getInformazioni(this.id));
@@ -146,7 +153,7 @@ $(document).ready(function() {
 function getInformazioni(idCasella)
 {
     informazioni=
-        {ora: "", giorno: "", mese: "", anno: ""}
+        {ora: "", giorno: "", mese: "", anno: ""};
     var res = idCasella.split("|");
     j=0;
     for (i in informazioni)
@@ -171,4 +178,12 @@ function convertiInDataJs (dataPhp)
     dataJs.setMonth(x[1]-1);
     dataJs.setDate(x[2]);
     return dataJs;
+}
+
+function convertiInCodice (oraPhp)
+{
+    var ora=oraPhp.split(":");
+    if (ora[1]==30) {ora[1]=50;}
+    codice=""+ora[0]+""+ora[1];
+    return codice;
 }
