@@ -111,8 +111,8 @@ $(document).ready(function() {
                     aperturaPomeriggio: $("#"+i+"-pom-dalle").val()+":00",
                     chiusuraPomeriggio: $("#"+i+"-pom-alle").val()+":00"
             };
-            dati[giorni[i]]=day;
-            //dati=dati.concat(day);
+            //dati[giorni[i]]=day; per avere gli indici con i giorni della settimana
+            dati=dati.concat(day); //per avere indici numerici da 0 a 6
             console.log(dati);
         }
 
