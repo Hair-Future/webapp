@@ -35,7 +35,7 @@ class VPrenotazione extends VJson
     public function riceviDataAppuntamento()
     {
         $dati = $this->ricevi();
-        return $dati['dati']['oraInizioAppuntamento'];
+        return $dati['dati']['dataAppuntamento'];
     }
 
     public function inviaDatiCalendario($durata, $intervalli)
