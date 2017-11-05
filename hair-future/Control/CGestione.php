@@ -28,9 +28,15 @@ class CGestione
     public function modificaOrario()
     {
         $Mercurio = new VGestione();
+        $session = USingleton::getInstance('CSession');
         $orarioArray = $Mercurio->riceviOrario();
-        $orario = new EOrarioApertura();
-        $check = $orario->modificaGiorni($orarioArray);
+
+        $utente = $session->leggiValore('utente');
+        if ($utente->getTipo() == 'Direttore')
+            $check = $utente->modificaOrario($orarioArray);
+        else
+            $check = -1;
+
         $Mercurio->invia($check);
     }
 
@@ -47,9 +53,14 @@ class CGestione
     public function segnaEffettuati()
     {
         $Mercurio = new VGestione();
-        $catalogo = new ECatalogoAppuntamenti();
+        $session = USingleton::getInstance('CSession');
+        $utente = $session->leggiValore('utente');
         $effettuati = $Mercurio->riceviEffettuati();
-        $check = $catalogo->segnaEffettuati($effettuati);
+        if ($utente->getTipo() == 'Direttore')
+            $check = $utente->segnaAppuntamentiEffettuati($effettuati);
+        else
+            $check = -1;
+        
         $Mercurio->invia($check);
     }
 }

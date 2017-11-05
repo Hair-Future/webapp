@@ -57,6 +57,18 @@ class EDirettore extends EUtente
         $catalogoServizi->rimuoviCategoria($nome);
     }
 
+    public function modificaOrario($orarioArray)
+    {
+        $orario = new EOrarioApertura();
+        return $orario->modificaGiorni($orarioArray);
+    }
+
+    public function segnaAppuntamentiEffettuati($effettuati)
+    {
+        $catalogo = USingleton::getInstance('ECatalogoAppuntamenti');
+        return $catalogo->segnaEffettuati($effettuati);
+    }
+
     //fatti per conto di un cliente
     public function prenotaAppuntamento($email, $listaServizi, $data, $ora)
     {
