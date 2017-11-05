@@ -33,7 +33,8 @@ class EStatistiche
         foreach ($risultati as $key=>$spesa){
             if($spesa > $max){
                 $max = $spesa;
-                $result = EGestoreUtenti::ottieniUtenteByID($key)'';
+                $utente = EGestoreUtenti::ottieniUtenteByID($key);
+                $result = $utente->convertiInArray();
             }
         }
         /*$utente = $gestoreUtenti->ottieniUtenteByID($result);
@@ -68,6 +69,7 @@ class EStatistiche
      */
     public function serviziApplicati($dataInizio, $dataFine){
         $catalogoAppuntamenti = USingleton::getInstance('ECatalogoAppuntamenti');
+        $catalogoServizi = USingleton::getInstance('ECatalogoServizi');
         $appuntamenti = $catalogoAppuntamenti->searchAppuntamentoByPeriodo($dataInizio, $dataFine);
         $totale = array();
         $max = 0;
@@ -89,7 +91,8 @@ class EStatistiche
         }
         $i = 0;
         foreach($totale as $key=>$value){
-            $result[$i]['servizio'] = $key;
+            $servizio = $catalogoServizi->ottieniServizioByCodice($key);
+            $result[$i]['servizio'] = $servizio->convertiInArray();
             $result[$i]['percentuale'] = $value / $max * 100;
             $i++;
         }
