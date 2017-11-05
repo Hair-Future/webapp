@@ -28,6 +28,6 @@ class FOrarioApertura extends FDb
                          aperturaPomeriggio = ?,
                          chiusuraPomeriggio = ?
                      WHERE giorno = ?;");
-        parent::query(array($aperturaMattina, $chiusuraMattina, $aperturaPomeriggio, $chiusuraPomeriggio, $giorno));
+        return parent::query(array($aperturaMattina, $chiusuraMattina, $aperturaPomeriggio, $chiusuraPomeriggio, $giorno));
     }
 }
