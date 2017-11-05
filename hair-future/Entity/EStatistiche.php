@@ -119,7 +119,8 @@ class EStatistiche
         $i = 0;
         foreach($mancati as $key=>$value){
             if($mancati[$key] > 0) {
-                $result[$i]['utente'] = $key;
+                $utente = EGestoreUtenti::ottieniUtenteByID($key);
+                $result[$i]['utente'] = $utente->convertiInArray();
                 $result[$i]['mancati'] = $value;
             }
             $i++;
