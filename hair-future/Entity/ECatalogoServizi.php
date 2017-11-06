@@ -181,11 +181,15 @@ class ECatalogoServizi
     public function ottieniListaServiziByCodici($listaCodici)
     {
         $lista = array();
-        foreach ($listaCodici as $id)
+        foreach ($listaCodici as $codice)
         {
-            $lista[] = $this->ottieniServizioByCodice($id);
+            $appuntamento = $this->ottieniServizioByCodice((int)$codice);
+            if (!is_null($appuntamento))
+                $lista[] = $appuntamento;
         }
+        return $lista;
     }
+
 
     public function ottieniCategoria($nome)
     {

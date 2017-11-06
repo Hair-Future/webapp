@@ -380,7 +380,19 @@ class ECatalogoAppuntamenti
         }
         return $prenotabili;
     }
-
+/*
+    public function ottieniListaServiziByCodici($listaCodici)
+    {
+        $lista = array();
+        foreach ($listaCodici as $codice)
+        {
+            $appuntamento = $this->searchAppuntamentoByCodice((int)$codice);
+            if (!is_null($appuntamento))
+                $lista[] = $appuntamento;
+        }
+        return $lista;
+    }
+*/
     public function segnaEffettuato($codice)
     {
         $appuntamento = $this->searchAppuntamentoByCodice($codice);
