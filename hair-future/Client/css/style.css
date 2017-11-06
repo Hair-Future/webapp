@@ -48,9 +48,19 @@
     height: 51px;
     box-shadow: none;*/
 
-    border-radius: 0px
+    border-radius: 0px;
 }
 #prenota:hover{
+    background-color: rgba(163, 17, 227, 0.85);
+}
+
+#appuntamenti{
+    background-color: rgba(163, 17, 227, 0.6);
+    color: #ffffff ;
+    border-color: transparent;
+}
+
+#appuntamenti:hover{
     background-color: rgba(163, 17, 227, 0.85);
 }
 

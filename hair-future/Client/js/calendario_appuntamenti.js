@@ -46,12 +46,12 @@ $(document).ready(function() {
 
     //dati da inviare al server per conoscere la disponibilità
     var richiesta= {
-        controller: "CPrenotazione",
-        metodo: "inviaDatiCalendario"
+        controller: "CGestione",
+        metodo: "inviaAppuntamenti"
     };
     var dati={
         numeroGiorni:7,
-        data: dataphp
+        dataInizio: dataphp
     };
 
     //richiesta post che restituirà gli intervalli disponibili
@@ -61,18 +61,13 @@ $(document).ready(function() {
                 dati:dati}),
         function (dati)
         {
-            for (i in dati.intervalli)
-            {   console.log(i);
-                for (j in dati.intervalli.i) {console.log(j);}
-            }
+            console.log(dati);
         },
         "json"
     );
     testo="";
 
     //supponiamo di ricevere i seguenti orari prenotabili
-    durata=60;
-    durata=durata/30;
 
     dateDisp= {
         "2017-11-4": {0: "1000", 1: "1250" },
