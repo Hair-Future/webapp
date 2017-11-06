@@ -54,14 +54,19 @@ $("#via").click(function(){
         if (metodo=="serviziApplicati")
         {
             testo=testo+
-                '<div class="title"> Dal '+dataInizio+' al '+dataFine+' il tuo ricavo è stato di:</div>'+
-                '<div class="ris">'+ris+' €</div>';
+                '<div class="title"> Lista dei servizi applicati dal '+dataInizio+' al '+dataFine+':</div>'+
+                '<div class="ris">';
+            for (i in ris)
+            {   console.log(ris[i].servizio);
+                testo=testo+' <div> '+ris[i].servizio.nome+ ' è stato applicato il '+ris[i].percentuale+'% delle volte</div>'
+            }
+            testo=testo+'</div>';
         }
         if (metodo=="maxSpesaUtente")
         {
             testo=testo+
                 '<div class="title"> Dal '+dataInizio+' al '+dataFine+" l'utente che ha speso di più è:</div>"+
-                '<div class="ris">'+ris.utente.nome+' '+ris.utente.cognome+' </div>';
+                '<div class="ris">'+ris.nome+' '+ris.cognome+' </div>';
         }
         if (metodo=="appuntamentiMancati")
         {

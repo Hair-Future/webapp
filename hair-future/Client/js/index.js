@@ -38,7 +38,7 @@ $(document).ready(function() {
                 function (data)
                 {
                     $(".result").html(data);
-                    alert("Ciao "+data.nome+""+data.cognome);
+                    window.location="index.html";
                 },
                 "json");
         }

@@ -28,14 +28,17 @@ $(document).ready(function() {
 
         '<li><a class="btn-default active" id="home" href="index.html">Home</a></li>' +
         '<li><a class="btn-default active" data-toggle="modal" data-target="#myModal" href="" id="login">Log In</a></li>' +
-        '<li><a class="btn-default active" id="logout">Log Out</a></li>' +
+        '<li><a class="btn-default active" id="logout" href="index.html">Log Out</a></li>' +
         '<li><a class="btn-default active" id="modifica_orari" href="modifica_orari.html">Modifica Orario</a></li>'+
         '<li><a class="btn-default active" id="statistiche" href="statistiche.html">Statistiche</a></li>'+
         '<li><a class="btn-default active" id="registrati" href="registrazione.html">Registrati</a></li>' +
         //'<!--<li><a class="btn btn-default active" href="#" role="button" id="btn-nav">Prenota</a></li> -->' +
-        '<li><a class=" btn-default active" id="prenota" href="scelta_servizi.html">' +
+        '<li><a class=" btn-default active" id="prenota">' +
         'Prenota' +
         '</a></li>' +
+        '<li><a class=" btn-default active" id="appuntamenti"" href="calendario_appuntamenti.html">' +
+        'Appuntamenti' +
+        '</a></li>'+
 
         '</ul>' +
 
@@ -49,7 +52,7 @@ $(document).ready(function() {
         $("#logout").hide();
         $("#modifica_orari").hide();
         $("#statistiche").hide();
-
+        $("#appuntamenti").hide();
 
     $.post
     (       indirizzo,
@@ -73,7 +76,9 @@ $(document).ready(function() {
                 if(utente.tipo=='Direttore')
                     //se l'utente connesso è un direttore pò anche modificare gli orari, vedere le statistiche
                 { $("#modifica_orari").show();
-                    $("#statistiche").show();}
+                    $("#statistiche").show();
+                    $("#prenota").hide();
+                    $("#appuntamenti").show();}
 
             }
             else { //se non c'è login mostriamo login, registrati
@@ -97,13 +102,37 @@ $(document).ready(function() {
                     dati: ""
                 }
             ),
+            "",
+            "json"
+        );
+    });
+
+    $('#prenota').click(function ()
+    {
+        $.post
+        (       indirizzo,
+            JSON.stringify(
+                {
+                    richiesta: {
+                        controller: "CLogin",
+                        metodo: "check"
+                    },
+                    dati: ""
+                }
+            ),
             function (dati)
             {
-                console.log('ciao');
-                console.log(dati);
-                window.location.reload();
+                $(".result").html(utente);
+                if(utente!=-1 && utente!=false)
+                {
+                    window.location="scelta_servizi.html";
+                }
+                else
+                {
+                    alert('Ops, sembra che tu non abbia effettuato il login')
+                }
             },
             "json"
         );
-    })
-})
+    });
+});
