@@ -332,11 +332,11 @@ class ECatalogoAppuntamenti
                     {
                         $libero = strtotime($intervallo["inizioIntervallo"]) - strtotime($fineIntervalloPrec);
                         $numIntervalli = floor($libero/$durata);
-                    }
-                    for ($i = 0; $i<$numIntervalli; $i++)
-                    {
-                        $prenotabili[] = $fineIntervalloPrec;
-                        $fineIntervalloPrec = date('H:i:s', strtotime('+'.$durataAppuntamento.' min', strtotime($fineIntervalloPrec)));
+                        for ($i = 0; $i<$numIntervalli; $i++)
+                        {
+                            $prenotabili[] = $fineIntervalloPrec;
+                            $fineIntervalloPrec = date('H:i:s', strtotime('+'.$durataAppuntamento.' min', strtotime($fineIntervalloPrec)));
+                        }
                     }
                     //if (strtotime($giorno->{"getChiusura".$mattinaPomeriggio}()) > strtotime($intervallo["fineIntervallo"]))
                         $fineIntervalloPrec = $intervallo["fineIntervallo"];
