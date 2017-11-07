@@ -34,7 +34,7 @@ class VGestione extends VJson
     public function riceviInizioPeriodo()
     {
         $dati = $this->ricevi();
-        return $dati['dati']['data'];
+        return $dati['dati']['dataInizio'];
     }
 
     public function riceviDurataPeriodo()
