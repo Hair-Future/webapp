@@ -120,7 +120,7 @@ $(document).ready(function() {
                     dati: ""
                 }
             ),
-            function (dati)
+            function (utente)
             {
                 $(".result").html(utente);
                 if(utente!=-1 && utente!=false)

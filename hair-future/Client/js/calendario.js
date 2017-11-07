@@ -162,7 +162,8 @@ $(document).ready(function() {
                 dataAppuntamento: giornoApp
         };
 
-        console.log(getInformazioni(this.id));
+        console.log(dati1);
+
         $.post(indirizzo,
             JSON.stringify(
                 {
@@ -172,6 +173,7 @@ $(document).ready(function() {
             function (risp)
             {
                 $(".result").html(risp);
+                console.log(risp);
             },
             "json"
         );

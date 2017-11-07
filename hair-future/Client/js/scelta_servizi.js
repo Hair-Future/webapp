@@ -85,7 +85,7 @@ $(document).ready(function() {
                 i++;
             }
         });
-       // console.log(listaServizi);
+        console.log(listaServizi);
 
 
         var richiesta= {
@@ -99,9 +99,9 @@ $(document).ready(function() {
                     richiesta: richiesta,
                     dati: {lista: listaServizi}
                 }),
-            function (intervalli)
+            function (x)
             {
-                console.log("passo all'altra pagina");
+
             },
             "json"
         );
