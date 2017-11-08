@@ -66,6 +66,12 @@ class EDirettore extends EUtente
     }
 
     //scrittura appuntamenti effettuati
+    public function segnaAppuntamentoEffettuato($effettuato)
+    {
+        $catalogo = USingleton::getInstance('ECatalogoAppuntamenti');
+        return $catalogo->segnaEffettuato($effettuato);
+    }
+
     public function segnaAppuntamentiEffettuati($effettuati)
     {
         $catalogo = USingleton::getInstance('ECatalogoAppuntamenti');

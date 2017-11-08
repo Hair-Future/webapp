@@ -57,7 +57,7 @@ class CGestione
         $utente = $session->leggiValore('utente');
         $effettuati = $Mercurio->riceviEffettuati();
         if ($utente->getTipo() == 'Direttore')
-            $check = $utente->segnaAppuntamentiEffettuati($effettuati);
+            $check = $utente->segnaAppuntamentoEffettuato($effettuati);
         else
             $check = -1;
 
