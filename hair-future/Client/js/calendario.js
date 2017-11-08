@@ -116,7 +116,6 @@ $(document).ready(function() {
     //supponiamo di ricevere i seguenti orari prenotabili
     function inserisciIntervalliDisponibili(durata, dateDisp)
     {
-
         //inserimento appuntamenti disponibili
         for (data in dateDisp) {
             for (i in dateDisp[data]) {
@@ -143,7 +142,6 @@ $(document).ready(function() {
             }
         }
     }
-
 
 
     $(".orario").click(function() {
@@ -174,6 +172,7 @@ $(document).ready(function() {
             {
                 $(".result").html(risp);
                 console.log(risp);
+                alert("ciao");
             },
             "json"
         );

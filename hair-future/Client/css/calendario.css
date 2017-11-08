@@ -16,6 +16,10 @@
     background-color: rgba(163, 17, 227, 0.9);
 }
 
+#pulsanti { text-align:center; }
+
+.modal-dialog {width: 25%;}
+
 .colonna {
     background-color: rgba(189, 52, 227, 0.9);
 }
