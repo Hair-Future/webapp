@@ -46,6 +46,6 @@ class VGestione extends VJson
     public function riceviEffettuati()
     {
         $dati = $this->ricevi();
-        return $dati['dati']['appuntamentiEffettuati'];
+        return $dati['dati']['appuntamentoEffettuato'];
     }
 }

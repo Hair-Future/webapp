@@ -50,7 +50,7 @@ class CGestione
         $Mercurio->invia($appuntamenti);
     }
 
-    public function segnaEffettuati()
+    public function segnaEffettuato()
     {
         $Mercurio = new VGestione();
         $session = USingleton::getInstance('CSession');
