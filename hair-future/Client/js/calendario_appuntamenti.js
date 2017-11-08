@@ -100,7 +100,6 @@ $(document).ready(function() {
 
     function inserisciAppuntamenti(appuntamenti)
     {
-        console.log(appuntamenti[0].ora);
         for (i in appuntamenti)
         {
             data=appuntamenti[i].data;
@@ -139,13 +138,10 @@ $(document).ready(function() {
 
         }
     }
-
-
+    
 
     $(".orario").click(function() {
         $("#myModal").modal();
-        console.log(this.id);
-        console.log(getInformazioni(this.id));
         informazioni = getInformazioni(this.id);
         $("#appEffettuato").click(function() { segnaEffettuato(informazioni); })
     });
@@ -157,19 +153,19 @@ $(document).ready(function() {
         var richiesta1
             = {
             controller: "CGestione",
-            metodo: "segnaEffettuati"
+            metodo: "segnaEffettuato"
         };
-        var dati = {appuntamentoEffettuato: informazioni.appuntamento};
+        var dati1 = {appuntamentoEffettuato: informazioni.appuntamento};
         $.post
         (indirizzo,
             JSON.stringify(
                 {
-                    richiesta: richiesta,
-                    dati: dati
+                    richiesta: richiesta1,
+                    dati: dati1
                 }),
-            function (dati) {
-                console.log(dati);
-                inserisciAppuntamenti(dati);
+            function (risp) {
+                console.log(risp);
+                inserisciAppuntamenti(risp);
             },
             "json"
         );
