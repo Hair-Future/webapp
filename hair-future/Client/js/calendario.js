@@ -64,8 +64,8 @@ $(document).ready(function() {
         for (i=0;i<7;i++)
         {
             giorno=new Date(oggi.getTime()+86400000*i);
-            //id di una casella: codiceOrario|Giorno|Mese|Anno
-            testo = testo + '<td id="'+j+'|'+giorno.getDate()+'|'+giorno.getMonth()+'|'+giorno.getFullYear()+'" class="orario '+giorno.getDay()+'" rowspan="1"></td>'
+            //id di una casella: codiceOrario-Giorno-Mese-Anno
+            testo = testo + '<td id="'+j+'-'+giorno.getDate()+'-'+giorno.getMonth()+'-'+giorno.getFullYear()+'" class="orario '+giorno.getDay()+'" rowspan="1"></td>'
         }
         testo=testo+"<td class='colonna'>"+orari[j]+"</td>";
         testo=testo+"</tr>";
@@ -121,7 +121,7 @@ $(document).ready(function() {
         for (data in dateDisp) {
             for (i in dateDisp[data]) {
                 datajs = convertiInDataJs(data);
-                elem = document.getElementById('' + dateDisp[data][i] + '|' + datajs.getDate() + '|' + datajs.getMonth() + '|' + datajs.getFullYear() + '');
+                elem = document.getElementById('' + dateDisp[data][i] + '-' + datajs.getDate() + '-' + datajs.getMonth() + '-' + datajs.getFullYear() + '');
                 elem.classList.add('has-events');
                 elem.rowSpan = durata;
                 elem.style.backgroundColor = "#a311e3";
@@ -134,9 +134,9 @@ $(document).ready(function() {
                 $(elem).append(descrizione);
                 for (j = 1; j < durata; j++) {
                     elimina = document.getElementById('' +
-                        (parseInt(dateDisp[data][i]) + (50 * j)) + '|' +
-                        datajs.getDate() + '|' +
-                        datajs.getMonth() + '|' +
+                        (parseInt(dateDisp[data][i]) + (50 * j)) + '-' +
+                        datajs.getDate() + '-' +
+                        datajs.getMonth() + '-' +
                         datajs.getFullYear() + '');
                     elimina.remove();
                 }
@@ -186,7 +186,7 @@ function getInformazioni(idCasella)
 {
     informazioni=
         {ora: "", giorno: "", mese: "", anno: ""};
-    var res = idCasella.split("|");
+    var res = idCasella.split("-");
     j=0;
     for (i in informazioni)
     {

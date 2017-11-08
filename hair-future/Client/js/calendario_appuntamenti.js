@@ -62,19 +62,12 @@ $(document).ready(function() {
         function (dati)
         {
             console.log(dati);
+            inserisciAppuntamenti(dati);
         },
         "json"
     );
     testo="";
 
-    //supponiamo di ricevere i seguenti orari prenotabili
-
-    dateDisp= {
-        "2017-11-4": {0: "1000", 1: "1250" },
-        "2017-11-6": { 0: "1400", 1: "1700" },
-        "2017-11-5": { 0: "1050", 1: "1700" },
-        "2017-11-7": { 0: "950", 1: "1200" },
-    }
 
     //Creazione dinamica della prima settimana
     testo=+testo+'<thead> <tr id="giorni"> <th><span class="glyphicon glyphicon-chevron-left"></span></th>'; //&nbsp;
@@ -94,8 +87,8 @@ $(document).ready(function() {
         for (i=0;i<7;i++)
         {
             giorno=new Date(oggi.getTime()+86400000*i);
-            //id di una casella: codiceOrario|Giorno|Mese|Anno
-            testo = testo + '<td id="'+j+'|'+giorno.getDate()+'|'+giorno.getMonth()+'|'+giorno.getFullYear()+'" class="orario '+giorno.getDay()+'" rowspan="1"></td>'
+            //id di una casella: codiceOrario-Giorno-Mese-Anno
+            testo = testo + '<td id="'+j+'-'+giorno.getDate()+'-'+giorno.getMonth()+'-'+giorno.getFullYear()+'" class="orario '+giorno.getDay()+'" rowspan="1"></td>'
         }
         testo=testo+"<td class='colonna'>"+orari[j]+"</td>";
         testo=testo+"</tr>";
@@ -105,44 +98,82 @@ $(document).ready(function() {
     $('#calendario').append(testo);
 
 
-    //inserimento appuntamenti disponibili
-    for (data in dateDisp)
+    function inserisciAppuntamenti(appuntamenti)
     {
-        for (i in dateDisp[data])
+        console.log(appuntamenti[0].ora);
+        for (i in appuntamenti)
         {
+            data=appuntamenti[i].data;
+            ora=appuntamenti[i].ora;
+            durata=(appuntamenti[i].durata)/30;
+            utente=appuntamenti[i].utente;
+            servizi=appuntamenti[i].servizi;
+
+            orario=parseInt(ora.substr(0,2));
+            if (ora.substr(3,2)=='30') {orario=orario+"50"}
+             else {orario=orario+"00"};
+
             datajs = convertiInDataJs(data);
-            elem = document.getElementById(''+dateDisp[data][i]+'|'+datajs.getDate()+'|'+datajs.getMonth()+'|'+datajs.getFullYear()+'');
+
+            elem = document.getElementById('' +orario+ '-' + datajs.getDate() + '-' + datajs.getMonth() + '-' + datajs.getFullYear() + '');
             elem.classList.add('has-events');
+            elem.id=elem.id+'-'+appuntamenti[i].codice;
             elem.rowSpan = durata;
             elem.style.backgroundColor = "#a311e3";
-            descrizione="";
-            descrizione='<div class="row-fluid lecture" style="width: 99%; height: 100%;">'+
-                '<span class="title">Nome Utente</span>'+
-                '<span class="lecturer"> -Servizio 1</span>'+
-                '<span class="location"> -Servizio 2</span>'+
-                '</div>';
+            descrizione = "";
+            descrizione = descrizione+'<div class="row-fluid lecture" style="width: 99%; height: 100%;">' +
+                    '<span class="title">'+utente.nome+' '+utente.cognome+'</span>'
+            for (j in servizi)
+            {   descrizione= descrizione +'<span class="lecturer">'+ servizi[j].nome +' </span>' }
+            descrizione= descrizione+'</div>';
             $(elem).append(descrizione);
-            console.log(elem);
-            for (j=1;j<durata;j++)
+            for (j = 1; j < durata; j++)
             {
                 elimina = document.getElementById('' +
-                    (parseInt(dateDisp[data][i])+(50*j)) + '|' +
-                    datajs.getDate() + '|' +
-                    datajs.getMonth() + '|' +
+                    (parseInt(orario) + (50 * j)) + '-' +
+                    datajs.getDate() + '-' +
+                    datajs.getMonth() + '-' +
                     datajs.getFullYear() + '');
-                elimina.remove();
+                    elimina.remove();
             }
+
         }
     }
 
 
+
     $(".orario").click(function() {
+        $("#myModal").modal();
+        console.log(this.id);
         console.log(getInformazioni(this.id));
+        informazioni = getInformazioni(this.id);
+        $("#appEffettuato").click(function() { segnaEffettuato(informazioni); })
     });
 
-    //rendere lo sfondo grigio alle caselle delle 11:00
-    // x=document.querySelectorAll('[id^="1100"]');
-    // for (i in x)  {x[i].style.backgroundColor="#969696";}
+    function segnaEffettuato(informazioni)
+    {
+
+        //dati da inviare al server per conoscere la disponibilità
+        var richiesta1
+            = {
+            controller: "CGestione",
+            metodo: "segnaEffettuati"
+        };
+        var dati = {appuntamentoEffettuato: informazioni.appuntamento};
+        $.post
+        (indirizzo,
+            JSON.stringify(
+                {
+                    richiesta: richiesta,
+                    dati: dati
+                }),
+            function (dati) {
+                console.log(dati);
+                inserisciAppuntamenti(dati);
+            },
+            "json"
+        );
+    };
 
 });
 
@@ -151,14 +182,15 @@ function getInformazioni(idCasella)
 {
     informazioni=
         {ora: "", giorno: "", mese: "", anno: ""};
-    var res = idCasella.split("|");
+    var res = idCasella.split("-");
     j=0;
     for (i in informazioni)
     {
         informazioni[i]=res[j];
         j++;
     }
-    return informazioni
+    if($("#"+idCasella).is(".has-events")) informazioni.appuntamento= res[j];
+    return informazioni;
 }
 
 function convertiInDataPhp (dataJs)

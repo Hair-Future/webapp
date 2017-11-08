@@ -18,13 +18,26 @@
     <!-- il contenuto della tabella viene generato da calendario.js  -->
 </table>
 
-</body>
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Segna appuntamento come effettuato</h4>
+            </div>
+            <div class="modal-body">
+                <button type="button" class="btn btn-default" data-dismiss="modal"><span class="glyphicon glyphicon-remove"></span></button>
+                <button type="button" class="btn btn-default" data-dismiss="modal" id="appEffettuato"><span class="glyphicon glyphicon-ok"></span></button>
+            </div>
+
+        </div>
+    </div>
+</div><!--end Modal-->
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 <script src="bootstrap/js/bootstrap.min.js"></script>
 <script src="js/navbar.js"></script>
 <script src="js/calendario_appuntamenti.js"></script>
 
-</html>
 </body>
 </html>
