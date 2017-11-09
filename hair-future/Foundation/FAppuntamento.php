@@ -26,13 +26,13 @@ class FAppuntamento extends FDb{
      * @param string $codice
      * @return array
      */
-    public function search($values)
+    public function search($data, $ora)
     {
         $this->sql = $this->con->prepare("SELECT *
                       FROM Appuntamento
-                      WHERE data >= ?
+                      WHERE data >= ? AND ora >= ?
                       ORDER BY `Appuntamento`.`ora` ASC;");
-        return parent::search(array($values));
+        return parent::search(array($data, $ora));
     }
 
     public function searchByPeriodo($values)

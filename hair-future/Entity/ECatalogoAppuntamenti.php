@@ -13,7 +13,7 @@ class ECatalogoAppuntamenti
     private function carica()
     {
         $db = new FAppuntamento();
-        $result = $db->search("CURRENT_DATE");
+        $result = $db->search("CURRENT_DATE", "CURRENT_TIME");
         $this->catalogo = [];
         foreach ($result as $row)
         {
@@ -363,7 +363,23 @@ class ECatalogoAppuntamenti
     {
         $date = new DateTime($data);
         $prenotabili = array();
-        for ($i = 0; $i < $numGiorni; $i++)
+
+        $intervalli = $this->ottieniIntervalliPrenotabiliMattinaOppurePomeriggio($date->format('Y-m-d'), $durataAppuntamento, 'Mattina');
+        foreach ($intervalli as $intervallo)
+        {
+            if (strtotime($intervallo) > time())
+                $prenotabili[$date->format('Y-m-d')][] = $intervallo;
+        }
+
+        $intervalli = $this->ottieniIntervalliPrenotabiliMattinaOppurePomeriggio($date->format('Y-m-d'), $durataAppuntamento, 'Pomeriggio');
+        foreach ($intervalli as $intervallo)
+        {
+            if (strtotime($intervallo) > time())
+                $prenotabili[$date->format('Y-m-d')][] = $intervallo;
+        }
+        $date->modify('+1 day');
+
+        for ($i = 1; $i < $numGiorni; $i++)
         {
             $intervalli = $this->ottieniIntervalliPrenotabiliMattinaOppurePomeriggio($date->format('Y-m-d'), $durataAppuntamento, 'Mattina');
             foreach ($intervalli as $intervallo)
