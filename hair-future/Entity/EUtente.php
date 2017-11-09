@@ -60,13 +60,20 @@ abstract class EUtente
      */
     public function addUtente($nome, $cognome, $recapito, $email, $password)
     {
-        $this->nome = $nome;
-        $this->cognome = $cognome;
-        $this->recapito = $recapito;
-        $this->email = $email;
-        $this->password = $password;
-        $db= new FUtente();
-        return $db->insert($nome, $cognome, $recapito, $email, $password,$this->getTipo());
+        if(!preg_match( '/^[\w\.\-]+@\w+[\w\.\-]*?\.\w{1,4}$/', $email))
+        {
+            return -1;
+        }
+        else
+        {
+            $this->nome = $nome;
+            $this->cognome = $cognome;
+            $this->recapito = $recapito;
+            $this->email = $email;
+            $this->password = $password;
+            $db= new FUtente();
+            return $db->insert($nome, $cognome, $recapito, $email, $password,$this->getTipo());
+        }
     }
 
     /**
