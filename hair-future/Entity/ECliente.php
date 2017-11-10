@@ -19,6 +19,15 @@ class ECliente extends EUtente
         return "Cliente";
     }
 
+    public function ottieniIntervalliPrenotabili($data, $numeroGiorni, $durata)
+    {
+        $catalogoAppuntamenti = USingleton::getInstance('ECatalogoAppuntamenti');
+
+        $intervalli = $catalogoAppuntamenti->ottieniIntervalliPrenotabili($data->format('Y-m-d'),
+            $numeroGiorni, $durata);
+        return $intervalli;
+    }
+
     public function prenotaAppuntamento($listaServizi, $data, $ora)
     {
         return parent::prenotaAppuntamento($this->getEmail(), $listaServizi, $data, $ora);
