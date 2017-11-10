@@ -41,10 +41,16 @@ class EOrarioApertura
      */
     public function modificaGiorno($valori){
         $db = new FOrarioApertura();
-        if(isset($this->listaGiorni[$valori['giorno']]) && (strtotime($valori['chiusuraMattina']) <= strtotime($valori['aperturaPomeriggio']))) {
+        if(isset($this->listaGiorni[$valori['giorno']]) &&
+            ((strtotime($valori['aperturaMattina']) <= strtotime($valori['chiusuraMattina'])) &&
+                (strtotime($valori['chiusuraMattina']) <= strtotime($valori['aperturaPomeriggio'])) &&
+                (strtotime($valori['aperturaMattina']) <= strtotime($valori['chiusuraPomeriggio']))))
+        {
             $this->listaGiorni[$valori['giorno']]->loadByValori($valori);
-            return $db->modificaGiorno($valori['giorno'], $valori['aperturaMattina'], $valori['chiusuraMattina'], $valori['aperturaPomeriggio'], $valori['chiusuraPomeriggio']);
-        }else
+            return $db->modificaGiorno($valori['giorno'], $valori['aperturaMattina'],
+                $valori['chiusuraMattina'], $valori['aperturaPomeriggio'], $valori['chiusuraPomeriggio']);
+        }
+        else
             return -1;
     }
 

@@ -44,7 +44,7 @@ class CGestione
     {
         $Mercurio = new VGestione();
         $session = USingleton::getInstance('CSession');
-        
+
         $dataInizio = $Mercurio->riceviInizioPeriodo();
         $numeroGiorni = $Mercurio->riceviDurataPeriodo();
         $utente = $session->leggiValore('utente');
