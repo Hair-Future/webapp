@@ -214,8 +214,15 @@ class EAppuntamento{
 
     public function effettuato()
     {
-        $Caronte = new FAppuntamento();
-        return $Caronte->done($this->codice);
+        if (strtotime($this->data) <= strtotime(date("Y-m-d")))
+        {
+            $Caronte = new FAppuntamento();
+            return $Caronte->done($this->codice);
+        }
+        else
+        {
+            return -1;
+        }
     }
 
     public function convertiInArray()

@@ -65,6 +65,12 @@ class EDirettore extends EUtente
         return $orario->modificaGiorni($orarioArray);
     }
 
+    public function ottieniAppuntamentiPeriodoInArray($dataInizio, $numeroGiorni)
+    {
+        $catalogo = USingleton::getInstance('ECatalogoAppuntamenti');
+        return $catalogo->ottieniAppuntamentiPeriodoInArray($dataInizio, $numeroGiorni);
+    }
+
     //scrittura appuntamenti effettuati
     public function segnaAppuntamentoEffettuato($effettuato)
     {

@@ -43,11 +43,18 @@ class CGestione
     public function inviaAppuntamenti()
     {
         $Mercurio = new VGestione();
-        $catalogo = USingleton::getInstance('ECatalogoAppuntamenti');
+        $session = USingleton::getInstance('CSession');
+        
         $dataInizio = $Mercurio->riceviInizioPeriodo();
         $numeroGiorni = $Mercurio->riceviDurataPeriodo();
-        $appuntamenti = $catalogo->ottieniAppuntamentiPeriodoInArray($dataInizio, $numeroGiorni);
-        $Mercurio->invia($appuntamenti);
+        $utente = $session->leggiValore('utente');
+
+        if ($utente->getTipo() == 'Direttore')
+            $risposta = $utente->ottieniAppuntamentiPeriodoInArray($dataInizio, $numeroGiorni);
+        else
+            $risposta = -1;
+
+        $Mercurio->invia($risposta);
     }
 
     public function segnaEffettuato()
