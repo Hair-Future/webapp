@@ -68,27 +68,77 @@ $(document).ready(function() {
         function (utente)
         {
             $(".result").html(utente);
-            if(utente!=-1 && utente!=false) { //se c'è un utente che ha effettuato il login può effettuare il logout
-                connesso_come='Sei connesso come <span style="color:#a311e3">'+ utente.nome + ' ' + utente.cognome+'</span>';
+            var fileHtml= location.pathname.split("/").slice(-1);
+
+            if(utente!=-1 && utente!=false) { //se c'è un utente che ha effettuato il login
+                if ((fileHtml=="statistiche.html" || fileHtml=="modifica_orari.html") && utente.tipo!='Direttore') window.location="index.html";
+                if ((fileHtml=="calendario.html"|| fileHtml=="scelta_servizi.html") && utente.tipo!='Cliente') window.location="index.html";
+                if (fileHtml=="calendario_appuntamenti.html" && utente.tipo=='Cliente') window.location="index.html";
+                if (fileHtml=="registrazione.html") window.location="index.html";
+
+                // connesso_come='Sei connesso come <span style="color:#a311e3">'+ utente.nome + ' ' + utente.cognome+'</span>';
                 document.getElementById("login_effettuato").append("Sei connesso come " + utente.nome +" "+ utente.cognome);
                 $("#logout").show();
 
                 if(utente.tipo=='Direttore')
-                    //se l'utente connesso è un direttore pò anche modificare gli orari, vedere le statistiche
+                    //se l'utente connesso è un direttore
                 { $("#modifica_orari").show();
                     $("#statistiche").show();
                     $("#prenota").hide();
-                    $("#appuntamenti").show();}
-
+                    $("#appuntamenti").show();
+                }
             }
             else { //se non c'è login mostriamo login, registrati
                 $("#login").show();
                 $("#registrati").show();
                 $('#prenota').click(function () {});
+                if (fileHtml!="index.html" && fileHtml!="registrazione.html" ) window.location="index.html";
+
             }
+
         },
         "json"
     );
+
+    $('#accedi').click(function () {
+
+        var email = $('#email').val();
+        var password = $('#password').val();
+
+
+        if (email == "" || password == "")
+        {
+            alert('I campi non possono essere vuoti!');
+        }
+        else
+        {
+            var richiesta={
+                controller : "CLogin",
+                metodo: "effettuaLogin"
+            };
+
+            var dati={
+                email: email,
+                password: password
+            };
+
+
+            $.post(
+                indirizzo,
+                JSON.stringify(
+                    {
+                        richiesta: richiesta,
+                        dati:dati
+                    }),
+                function (data)
+                {
+                    $(".result").html(data);
+                    window.location="index.html";
+                },
+                "json");
+        }
+    });
+
 
     $('#logout').click(function () {
         $.post

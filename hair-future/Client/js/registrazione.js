@@ -11,13 +11,13 @@ $(document).ready(function()
         var nome = $('#nome').val();
         var cognome = $('#cognome').val();
         var telefono = $('#telefono').val();
-        var email = $('#email').val();
+        var emailReg = $('#emailReg').val();
         var pass1 = $('#pass1').val();
         var pass2 = $('#pass2').val();
 
 
 
-        if (nome == "" || cognome == "" || telefono == "" || email == "" || pass1 == "" || pass2 == "")
+        if (nome == "" || cognome == "" || telefono == "" || emailReg == "" || pass1 == "" || pass2 == "")
         {
             alert("Per favore, inserisci tutti i campi!");
         } else if (pass1 !== pass2) {
@@ -33,7 +33,7 @@ $(document).ready(function()
                     nome : nome,
                     cognome : cognome,
                     telefono : telefono,
-                    email: email,
+                    email: emailReg,
                     password: pass1
                 };
 
@@ -45,7 +45,10 @@ $(document).ready(function()
                      }),
                  function (risultato) {
                      $(".result").html(risultato);
+                     if(risultato!="-1")
                      alert("Ciao "+risultato.nome+", hai effettuato la registrazione con successo!");
+                     else alert ("Ops! C'è già un account in uso con quella e-mail");
+                     //alert(risultato);
                  },
                  "json"
              );
@@ -60,7 +63,7 @@ $(document).ready(function()
         var nome = $('#nome').val();
         var cognome = $('#cognome').val();
         var telefono = $('#telefono').val();
-        var email = $('#email').val();
+        var emailReg = $('#emailReg').val();
         var pass1 = $('#pass1').val();
         var pass2 = $('#pass2').val();
         var login = "login";
