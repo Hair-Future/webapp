@@ -145,41 +145,47 @@ $(document).ready(function() {
 
     $(".orario").click(function() {
         info=getInformazioni(this.id);
-        oraIn=info.ora;
-        giornoApp=info.anno+"-"+(parseInt(info.mese)+1)+"-"+info.giorno;
-        //dati da inviare al server per salvare la prenotazione
-        var richiesta1= {
-            controller: "CPrenotazione",
-            metodo: "effettuaPrenotazione"
-        };
+        console.log(info);
+        if($("#"+this.id).is(".has-events"))
+        {
+            oraIn = info.ora;
+            giornoApp = info.anno + "-" + (parseInt(info.mese) + 1) + "-" + info.giorno;
+            //dati da inviare al server per salvare la prenotazione
+            var richiesta1 = {
+                controller: "CPrenotazione",
+                metodo: "effettuaPrenotazione"
+            };
 
-        var dati1=
-            {
-                oraInizioAppuntamento: orari[oraIn]+":00",
-                dataAppuntamento: giornoApp
-        };
-
-        console.log(dati1);
-
-        $.post(indirizzo,
-            JSON.stringify(
+            var dati1 =
                 {
-                    richiesta: richiesta1,
-                    dati:dati1
-                }),
-            function (risp)
-            {
-                $(".result").html(risp);;
-                if(risp==0)
-                    {alert("Appuntamento prenotato con successo!");
-                    window.locatiom="index.html";}
-                else
-                {alert("Ops, si è verificato un errore! Riprova a selezionare un appuntamento");
-                    window.location="calendario.html";}
+                    oraInizioAppuntamento: orari[oraIn] + ":00",
+                    dataAppuntamento: giornoApp
+                };
 
-            },
-            "json"
-        );
+            console.log(dati1);
+
+            $.post(indirizzo,
+                JSON.stringify(
+                    {
+                        richiesta: richiesta1,
+                        dati: dati1
+                    }),
+                function (risp) {
+                    $(".result").html(risp);
+                    ;
+                    if (risp == 0) {
+                        alert("Appuntamento prenotato con successo!");
+                        window.location = "index.html";
+                    }
+                    else {
+                        alert("Ops, si è verificato un errore! Riprova a selezionare un appuntamento");
+                        window.location = "calendario.html";
+                    }
+
+                },
+                "json"
+            );
+        }
     });
 
 });
@@ -196,6 +202,7 @@ function getInformazioni(idCasella)
         informazioni[i]=res[j];
         j++;
     }
+    if($("#"+idCasella).is(".has-events")) informazioni.appuntamento= res[j];
     return informazioni
 }
 

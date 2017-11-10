@@ -1,50 +1,55 @@
 /**
  * Created by loren on 05/11/2017.
  */
-$(document).ready(function() {
+$(document).ready(function()
+    {
+        oggi=new Date();
+        $("#giorno_fine").val(convertiInDataPhp(oggi));
+        oggi.setDate(oggi.getDate()-30);
+        $("#giorno_inizio").val(convertiInDataPhp(oggi));
+    });
 
-    oggi=new Date();
-    $("#giorno_fine").val(convertiInDataPhp(oggi));
-    oggi.setDate(oggi.getDate()-30);
-    $("#giorno_inizio").val(convertiInDataPhp(oggi));
-
-})
-
-
-$("#via").click(function(){
-
+$("#via").click(function()
+    {
     if($("#risultato")!==null) {$("#risultato").remove();}
     statistica= $("#scegli_statistica").val();
     inizio= $("#giorno_inizio").val();
+    iniziojs=convertiInDataJs(inizio);
     fine= $("#giorno_fine").val();
+    finejs=convertiInDataJs(fine);
+    oggi= new Date();
 
-    if (inizio<fine) console.log('ok');
-    else console.log('no');
 
-    if(!inizio || !fine) alert ("Attenzione inserire tutti i campi")
+    if(!inizio || !fine) alert ("Attenzione: inserire tutti i campi")
     else{
-        var richiesta={
-            controller : "CStatistiche",
-            metodo: statistica
-        };
+        if( iniziojs.getTime()>oggi.getTime() || finejs.getTime()>oggi.getTime()) alert("Attenzione: le date devono essere uguali o antecedenti ad oggi");
+        else {
+            if (iniziojs.getTime() >= finejs.getTime()) alert("Attenzione: la data di inizio deve essere precedente alla data di fine");
+            else {
+                var richiesta = {
+                    controller: "CStatistiche",
+                    metodo: statistica
+                };
 
-        var dati={
-            dataInizio : inizio,
-            dataFine : fine,
-        };
-        $.post(indirizzo,
-            JSON.stringify(
-                {
-                    richiesta: richiesta,
-                    dati: dati
-                }),
-            function (risultato) {
-                $(".result").html(risultato);
-                console.log(risultato);
-                visualizzaRis(risultato, richiesta.metodo, dati);
-            },
-            "json"
-        );
+                var dati = {
+                    dataInizio: inizio,
+                    dataFine: fine
+                };
+                $.post(indirizzo,
+                    JSON.stringify(
+                        {
+                            richiesta: richiesta,
+                            dati: dati
+                        }),
+                    function (risultato) {
+                        $(".result").html(risultato);
+                        console.log(risultato);
+                        visualizzaRis(risultato, richiesta.metodo, dati);
+                    },
+                    "json"
+                );
+            }
+        }
     }
 
 
