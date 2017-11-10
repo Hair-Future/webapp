@@ -26,7 +26,9 @@ class CPrenotazione
 
         $durata = $catalogoServizi->getDurataListaServizi($listaCodici);
         $lista = $catalogoServizi->ottieniListaServiziByCodici($listaCodici);
+        $data = new DateTime("now");
 
+        $session->impostaValore('data', $data);
         $session->impostaValore('durataListaServiziAttuale', $durata);
         $session->impostaValore('listaServiziAttuale', $lista);
     }
@@ -35,15 +37,29 @@ class CPrenotazione
     {
         $Mercurio = new VPrenotazione();
         $session = USingleton::getInstance('CSession');
-        $catalogoAppuntamenti = USingleton::getInstance('ECatalogoAppuntamenti');
 
-        $data = $Mercurio->riceviPrimoGiornoCalendario();
-        $numeroGiorni =$Mercurio->riceviNumeroGiorni();
+        //$data = $Mercurio->riceviPrimoGiornoCalendario();
+        $data = $session->leggiValore('data');
+        $numeroGiorni = (int)$Mercurio->riceviNumeroGiorni();
+        $cliente = $session->leggiValore('utente');
 
         $durata = $session->leggiValore('durataListaServiziAttuale');
-        $intervalli = $catalogoAppuntamenti->ottieniIntervalliPrenotabili($data, $numeroGiorni, $durata);
+        $intervalli = $cliente->ottieniIntervalliPrenotabili($data->format('Y-m-d'),
+            $numeroGiorni, $durata);
 
-        $Mercurio->inviaDatiCalendario($durata, $intervalli);
+        $Mercurio->inviaDatiCalendario($data->format('Y-m-d'), $durata, $intervalli);
+    }
+
+    public function spostaDiNGiorni()
+    {
+        $Mercurio = new VPrenotazione();
+        $session = USingleton::getInstance('CSession');
+
+        $data = $session->leggiValore('data');
+        $numeroGiorni = $Mercurio->riceviNumeroGiorni();
+
+        $data->modify($numeroGiorni.' day');
+        $session->impostaValore('data', $data);
     }
 
     public function effettuaPrenotazione()
