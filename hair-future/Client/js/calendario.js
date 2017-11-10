@@ -123,7 +123,6 @@ $(document).ready(function() {
                 elem = document.getElementById('' + dateDisp[data][i] + '-' + datajs.getDate() + '-' + datajs.getMonth() + '-' + datajs.getFullYear() + '');
                 elem.classList.add('has-events');
                 elem.rowSpan = durata;
-                elem.style.backgroundColor = "#a311e3";
                 descrizione = "";
                 descrizione = '<div class="row-fluid lecture" style="width: 99%; height: 100%;">' +
                     '<span class="title">Prenota per il</span>' +
@@ -170,9 +169,14 @@ $(document).ready(function() {
                 }),
             function (risp)
             {
-                $(".result").html(risp);
-                console.log(risp);
-                alert("ciao");
+                $(".result").html(risp);;
+                if(risp==0)
+                    {alert("Appuntamento prenotato con successo!");
+                    window.locatiom="index.html";}
+                else
+                {alert("Ops, si è verificato un errore! Riprova a selezionare un appuntamento");
+                    window.location="calendario.html";}
+
             },
             "json"
         );

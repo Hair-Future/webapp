@@ -14,28 +14,34 @@
 
 #giorni{
     background-color: rgba(163, 17, 227, 0.9);
+    color: white;
 }
 
 #pulsanti { text-align:center; }
+
+#no {background-color: red;}
+#appEffettuato {background-color: green;}
 
 .modal-dialog {width: 25%;}
 
 .colonna {
     background-color: rgba(189, 52, 227, 0.9);
+    color: white;
 }
 
+
 table.calendar > tbody > tr > td.has-events:hover{
-    background-color: rgba(163, 17, 227, 0.7);
+    background-color: rgb(227, 27, 208);
 }
 
 td {
-    background-color: rgba(213, 212, 221, 0);
+    background-color: rgba(173, 172, 181, 0);
 }
 
 .scrollbar
 {
     float: left;
-    background-color: rgba(213, 212, 221, 0.7);
+    background-color: rgba(213, 212, 221, 0.8);
     overflow-y: scroll;
 }
 
@@ -91,6 +97,7 @@ table.calendar > tbody > tr > td.has-events {
     cursor: pointer;
     padding: 0;
     border-radius: 10px;
+    background-color: #a311e3;
 }
 
 table.calendar > tbody > tr > td.has-events > div {

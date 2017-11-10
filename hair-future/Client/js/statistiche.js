@@ -1,6 +1,15 @@
 /**
  * Created by loren on 05/11/2017.
  */
+$(document).ready(function() {
+
+    oggi=new Date();
+    $("#giorno_fine").val(convertiInDataPhp(oggi));
+    oggi.setDate(oggi.getDate()-30);
+    $("#giorno_inizio").val(convertiInDataPhp(oggi));
+
+})
+
 
 $("#via").click(function(){
 
@@ -8,6 +17,9 @@ $("#via").click(function(){
     statistica= $("#scegli_statistica").val();
     inizio= $("#giorno_inizio").val();
     fine= $("#giorno_fine").val();
+
+    if (inizio<fine) console.log('ok');
+    else console.log('no');
 
     if(!inizio || !fine) alert ("Attenzione inserire tutti i campi")
     else{
@@ -86,3 +98,20 @@ $("#via").click(function(){
     }
 
 });
+
+function convertiInDataPhp (dataJs)
+{
+    if(dataJs.getDate()<10) {giorno="0"+dataJs.getDate()} else {giorno=dataJs.getDate()}
+    dataPhp=""+dataJs.getFullYear()+"-"+(dataJs.getMonth()+1)+"-"+giorno;
+    return dataPhp;
+}
+
+function convertiInDataJs (dataPhp)
+{
+    var x =dataPhp.split("-");
+    dataJs= new Date;
+    dataJs.setFullYear(x[0]);
+    dataJs.setMonth(x[1]-1);
+    dataJs.setDate(x[2]);
+    return dataJs;
+}

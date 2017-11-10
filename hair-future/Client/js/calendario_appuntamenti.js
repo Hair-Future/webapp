@@ -118,7 +118,6 @@ $(document).ready(function() {
             elem.classList.add('has-events');
             elem.id=elem.id+'-'+appuntamenti[i].codice;
             elem.rowSpan = durata;
-            elem.style.backgroundColor = "#a311e3";
             descrizione = "";
             descrizione = descrizione+'<div class="row-fluid lecture" style="width: 99%; height: 100%;">' +
                     '<span class="title">'+utente.nome+' '+utente.cognome+'</span>'
@@ -138,12 +137,16 @@ $(document).ready(function() {
 
         }
     }
-    
+
 
     $(".orario").click(function() {
-        $("#myModal").modal();
         informazioni = getInformazioni(this.id);
-        $("#appEffettuato").click(function() { segnaEffettuato(informazioni); })
+        if($("#"+this.id).is(".has-events")) {
+            $("#myModal").modal();
+            $("#appEffettuato").click(function () {
+                segnaEffettuato(informazioni);
+            })
+        }
     });
 
     function segnaEffettuato(informazioni)
