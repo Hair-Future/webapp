@@ -54,9 +54,9 @@ class ECatalogoAppuntamenti
             $oraFineTemp = strtotime($data." ".$appuntamento->getOraFine());
 
             if (((($startTime <= $oraInizioTemp) && ($endTime >= $oraFineTemp)) ||
-                (($startTime <= $oraInizioTemp) && (($endTime <= $oraFineTemp) && ($endTime >= $oraInizioTemp))) ||
-                ((($startTime >= $oraInizioTemp) && ($startTime <= $oraFineTemp)) && ($endTime >= $oraFineTemp)) ||
-                (($startTime >= $oraInizioTemp) && ($endTime <= $oraFineTemp))))
+                (($startTime < $oraInizioTemp) && (($endTime <= $oraFineTemp) && ($endTime > $oraInizioTemp))) ||
+                ((($startTime >= $oraInizioTemp) && ($startTime < $oraFineTemp)) && ($endTime >= $oraFineTemp)) ||
+                (($startTime > $oraInizioTemp) && ($endTime < $oraFineTemp))))
             {
                 return -1;
             }
