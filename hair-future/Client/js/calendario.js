@@ -172,7 +172,6 @@ $(document).ready(function() {
                     }),
                 function (risp) {
                     $(".result").html(risp);
-                    ;
                     if (risp == 0) {
                         alert("Appuntamento prenotato con successo!");
                         window.location = "index.html";
