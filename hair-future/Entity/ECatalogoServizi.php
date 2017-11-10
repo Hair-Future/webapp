@@ -111,33 +111,6 @@ class ECatalogoServizi
     /**
      * @param $nome
      * @param $prezzo
-     * @return SServizioUpdater: successo, null:fallimento
-     */
-    public function ottieniServizioUpdater($nome, $prezzo)
-    {
-        foreach ($this->listaCategorie as $item)
-        {
-            $servizio = $item->ottieniServizio($nome, $prezzo);
-            if ($servizio!=null)
-            {
-                return new SServizioUpdater($servizio);
-            }
-        }
-        return null;
-    }
-
-    /**
-     * @param $nome
-     * @return SCategoriaUpdater: successo, null: fallimento
-     */
-    public function ottieniCategoriaUpdater($nome)
-    {
-        return new SCategoriaUpdater($this->ricercaCategoria($nome));
-    }
-
-    /**
-     * @param $nome
-     * @param $prezzo
      * @return EServizio|null
      */
     public function ottieniServizio($nome, $prezzo)
