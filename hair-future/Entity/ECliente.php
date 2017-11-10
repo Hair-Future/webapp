@@ -23,7 +23,7 @@ class ECliente extends EUtente
     {
         $catalogoAppuntamenti = USingleton::getInstance('ECatalogoAppuntamenti');
 
-        $intervalli = $catalogoAppuntamenti->ottieniIntervalliPrenotabili($data->format('Y-m-d'),
+        $intervalli = $catalogoAppuntamenti->ottieniIntervalliPrenotabili($data,
             $numeroGiorni, $durata);
         return $intervalli;
     }
