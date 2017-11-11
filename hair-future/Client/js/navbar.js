@@ -130,9 +130,12 @@ $(document).ready(function() {
                         richiesta: richiesta,
                         dati:dati
                     }),
-                function (data)
+                function (risp)
                 {
-                    $(".result").html(data);
+                    $(".result").html(risp);
+                    if (risp==-1)
+                        alert("Attenzione: E-mail o Password non valide");
+                    else
                     window.location="index.html";
                 },
                 "json");

@@ -40,80 +40,87 @@ $(document).ready(function() {
         11: "Dicembre"
     }; //Att! i mesi iniziano da 0 es. novembre=10
 
-    //vedere che giorno è oggi
-    oggi= new Date();
-    // formattare il giorno in base alla classe data di php nel formato Y-m-d
-    dataphp=convertiInDataPhp(oggi);
-
-    testo="";
-    //Creazione dinamica della prima settimana
-    testo=+testo+'<thead> <tr id="giorni"> <th><span class="glyphicon glyphicon-chevron-left"></span></th>'; //&nbsp;
-
-    // creazione barra in cui sono segnati i giorni a partire da oggi
-    for (i=0;i<7;i++)
-    {
-        giorno=new Date(oggi.getTime()+86400000*i);
-        testo=testo+'<th width="14%">'+giorni[giorno.getDay()]+'<br>'+giorno.getDate()+' '+mesi[giorno.getMonth()]+'</th>';
-    }
-    testo=testo+'<th><span class="glyphicon glyphicon-chevron-right"></span></th></tr></thead> <tbody id="iniziotabella">';
-
-    // creazione caselle a cui vengono associati degli id in base alle loro caratteristiche (giorno, ora,...)
-    for (j in orari)
-    {
-        testo=testo+"<tr><td class='colonna'>"+orari[j]+"</td>";
-        for (i=0;i<7;i++)
-        {
-            giorno=new Date(oggi.getTime()+86400000*i);
-            //id di una casella: codiceOrario-Giorno-Mese-Anno
-            testo = testo + '<td id="'+j+'-'+giorno.getDate()+'-'+giorno.getMonth()+'-'+giorno.getFullYear()+'" class="orario '+giorno.getDay()+'" rowspan="1"></td>'
-        }
-        testo=testo+"<td class='colonna'>"+orari[j]+"</td>";
-        testo=testo+"</tr>";
-    }
-
-    testo=testo+ "</tbody>";
-    $('#calendario').append(testo);
-
 
     //dati da inviare al server per conoscere la disponibilità
-    var richiesta= {
+    var richiesta = {
         controller: "CPrenotazione",
         metodo: "inviaDatiCalendario"
     };
-    var dati={
-        numeroGiorni:7,
-        data: dataphp
+    var dati = {
+        numeroGiorni: 7
     };
 
     //richiesta post che restituirà gli intervalli disponibili
     $.post(indirizzo,
         JSON.stringify(
-            {richiesta: richiesta,
-            dati:dati}),
-        function (prenotabili)
-        {
+            {
+                richiesta: richiesta,
+                dati: dati
+            }),
+        function (prenotabili) {
             //durata diventa numero di "mezz'ore"
             $(".result").html(prenotabili);
-            durata=prenotabili.durata/30;
-
-            //formattazione delle date ricevute secondo le date e gli orari qui definiti
-            for (i in prenotabili.intervalli)
-            {
-                giorno=prenotabili.intervalli[i];
-                for ( j in giorno ) {
-                    ora=giorno[j];
-                    ore=parseInt(ora.substr(0,2));
-                    if (ora.substr(3,2)=='30') {prenotabili.intervalli[i][j]=ore+"50"}
-                    else {prenotabili.intervalli[i][j]=ore+"00"};
-                }
-            }
-
-            inserisciIntervalliDisponibili(durata, prenotabili.intervalli);
+                creaTabella(prenotabili);
         },
         "json"
     );
 
-    //supponiamo di ricevere i seguenti orari prenotabili
+    function creaTabella(prenotabili)
+    {
+        // formattare il giorno che arriva in php nel formato Y-m-d in formato js
+        dataphp=prenotabili.data;
+        giornoInizio = convertiInDataJs(dataphp);
+
+        ind="indietro";
+        av="avanti";
+        testo = "";
+        //Creazione dinamica della prima settimana
+        testo = +testo + '<thead> <tr id="giorni"> <th><button class="freccia" id="settPrecedente" onClick="sposta(ind)"><span class="glyphicon glyphicon-chevron-left"></span></button></th>'; //&nbsp;
+
+        // creazione barra in cui sono segnati i giorni a partire dal valore di "giornoInizio"
+        for (i = 0; i < 7; i++) {
+            giorno = new Date(giornoInizio.getTime() + 86400000 * i);
+            testo = testo + '<th width="14%">' + giorni[giorno.getDay()] + '<br>' + giorno.getDate() + ' ' + mesi[giorno.getMonth()] + '</th>';
+        }
+        testo = testo + '<th><button id="settSuccessiva" class="freccia" onClick="sposta(av)"><span class="glyphicon glyphicon-chevron-right"></span></button></th> </tr></thead> <tbody id="iniziotabella">';
+
+        // creazione caselle a cui vengono associati degli id in base alle loro caratteristiche (giorno, ora,...)
+        for (j in orari) {
+            testo = testo + "<tr><td class='colonna'>" + orari[j] + "</td>";
+            for (i = 0; i < 7; i++) {
+                giorno = new Date(giornoInizio.getTime() + 86400000 * i);
+                //id di una casella: codiceOrario-Giorno-Mese-Anno
+                testo = testo + '<td id="' + j + '-' + giorno.getDate() + '-' + giorno.getMonth() + '-' + giorno.getFullYear() + '" class="orario ' + giorno.getDay() + '" rowspan="1"></td>'
+            }
+            testo = testo + "<td class='colonna'>" + orari[j] + "</td>";
+            testo = testo + "</tr>";
+        }
+
+        testo = testo + "</tbody>";
+        $('#calendario').append(testo);
+
+        durata = prenotabili.durata / 30;
+
+        //formattazione delle date ricevute secondo le date e gli orari qui definiti
+        for (i in prenotabili.intervalli) {
+            giorno = prenotabili.intervalli[i];
+            for (j in giorno) {
+                ora = giorno[j];
+                ore = parseInt(ora.substr(0, 2));
+                if (ora.substr(3, 2) == '30') {
+                    prenotabili.intervalli[i][j] = ore + "50"
+                }
+                else {
+                    prenotabili.intervalli[i][j] = ore + "00"
+                }
+                ;
+            }
+        }
+
+        inserisciIntervalliDisponibili(durata, prenotabili.intervalli);
+
+    }
+
     function inserisciIntervalliDisponibili(durata, dateDisp)
     {
         //inserimento appuntamenti disponibili
@@ -188,6 +195,23 @@ $(document).ready(function() {
     });
 
 });
+
+function sposta(spostamento) {
+    if (spostamento=="avanti") x=7;
+    else x=-7;
+    $.post(indirizzo,
+        JSON.stringify(
+            {
+                richiesta:
+                    {controller: "CPrenotazione",
+                        metodo: "spostaDiNGiorni"},
+                dati: {numeroGiorni: x}
+            }),
+       "",
+        "json"
+    );
+    window.location="calendario.html";
+}
 
 //funzione che restituisce le informazioni di una casella passandogli l'id
 function getInformazioni(idCasella)

@@ -4,8 +4,5 @@
 $(document).ready(function() {
     indirizzo='../index.php';
 
-
-
-
     });
 

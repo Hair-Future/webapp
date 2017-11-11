@@ -12,6 +12,10 @@
     margin-bottom: 20px;
 }
 
+
+.freccia{
+    cursor: pointer;}
+
 #giorni{
     background-color: rgba(163, 17, 227, 0.9);
     color: white;
