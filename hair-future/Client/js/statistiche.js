@@ -53,7 +53,6 @@ $("#via").click(function()
     }
 
 
-
     function visualizzaRis(ris, metodo, giorni)
     {
         x=giorni.dataInizio.split("-");
@@ -70,7 +69,7 @@ $("#via").click(function()
         }
         if (metodo=="serviziApplicati")
         {
-            testo=testo+
+            /*testo=testo+
                 '<div class="title"> Lista dei servizi applicati dal '+dataInizio+' al '+dataFine+':</div>'+
                 '<div class="ris">';
             for (i in ris)
@@ -78,6 +77,9 @@ $("#via").click(function()
                 testo=testo+' <div> '+ris[i].servizio.nome+ ' è stato applicato il '+ris[i].percentuale+'% delle volte</div>'
             }
             testo=testo+'</div>';
+            */
+            testo=testo+'<div class="title"> Lista dei servizi applicati dal '+dataInizio+' al '+dataFine+':</div>'+
+                '<div class="ris"><div id="chartContainer" style="height: 300px; width: 100%;"></div></div>'
         }
         if (metodo=="maxSpesaUtente")
         {
@@ -99,6 +101,7 @@ $("#via").click(function()
 
         testo=testo+'</div>';
         $("#box").append(testo);
+        if(metodo=="serviziApplicati") {creaPieChart(ris);}
 
     }
 
@@ -119,4 +122,34 @@ function convertiInDataJs (dataPhp)
     dataJs.setMonth(x[1]-1);
     dataJs.setDate(x[2]);
     return dataJs;
+}
+
+function creaPieChart(dati) {
+
+    percentuali= [];
+    for (i in dati)
+    {   console.log(dati[i].servizio);
+        testo=testo+' <div> '+dati[i].servizio.nome+ ' è stato applicato il '+dati[i].percentuale+'% delle volte</div>'
+
+        percentuali.push({y: dati[i].percentuale, indexLabel: dati[i].servizio.nome});
+        console.log(percentuali);
+    }
+
+        var chart = new CanvasJS.Chart("chartContainer",
+            {   animationEnabled: true,
+                theme: "theme2",
+                data: [
+                    {
+                        type: "pie",
+                        showInLegend: true,
+                        toolTipContent: "#percent %",
+                        yValueFormatString: "##0.00\"%\"",
+                        legendText: "{indexLabel}",
+                        dataPoints:
+                            percentuali
+
+                    }
+                ]
+            });
+        chart.render();
 }
