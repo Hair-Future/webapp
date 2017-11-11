@@ -22,6 +22,8 @@ $(document).ready(function()
             alert("Per favore, inserisci tutti i campi!");
         } else if (pass1 !== pass2) {
             alert("Attenzione! Le password non corrispondono!");
+        } else if(!validateEmail(emailReg)) {
+            alert("Attenzione! E-mail non valida!")
         } else
             {
                 var richiesta={
@@ -46,7 +48,8 @@ $(document).ready(function()
                  function (risultato) {
                      $(".result").html(risultato);
                      if(risultato!="-1")
-                     alert("Ciao "+risultato.nome+", hai effettuato la registrazione con successo!");
+                     {alert("Ciao "+risultato.nome+", hai effettuato la registrazione con successo!");
+                        window.location="index.html"; }
                      else alert ("Ops! C'è già un account in uso con quella e-mail");
                      //alert(risultato);
                  },
@@ -70,6 +73,10 @@ $(document).ready(function()
 
     });
 
+    function validateEmail(email) {
+        var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        return re.test(email);
+    }
 
 });
 
