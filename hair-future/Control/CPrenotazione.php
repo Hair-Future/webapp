@@ -59,7 +59,10 @@ class CPrenotazione
         $numeroGiorni = $Mercurio->riceviNumeroGiorni();
 
         $data->modify($numeroGiorni.' day');
-        $session->impostaValore('data', $data);
+        if ($data->diff(new DateTime("now")) > 0)
+        {
+            $session->impostaValore('data', $data);
+        }
     }
 
     public function effettuaPrenotazione()
