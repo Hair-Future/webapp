@@ -57,7 +57,7 @@ class CGestione
         if ($utente->getTipo() == 'Direttore')
             $appuntamenti= $utente->ottieniAppuntamentiPeriodoInArray($dataInizio, $numeroGiorni);
         else
-            $appunatmenti= -1;
+            $appuntamenti= -1;
 
         $Mercurio->inviaAppuntamentiData($appuntamenti, $dataInizio);
     }
