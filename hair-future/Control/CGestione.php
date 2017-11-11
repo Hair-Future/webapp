@@ -45,9 +45,14 @@ class CGestione
         $Mercurio = new VGestione();
         $session = USingleton::getInstance('CSession');
 
-        $dataInizio = $Mercurio->riceviInizioPeriodo();
+        //$dataInizio = $Mercurio->riceviInizioPeriodo();
         $numeroGiorni = $Mercurio->riceviDurataPeriodo();
         $utente = $session->leggiValore('utente');
+        $data = $session->leggiValore('data');
+        if ($data == false)
+            $data = new DateTime('now');
+
+        $dataInizio = $data->format('Y-m-d');
 
         if ($utente->getTipo() == 'Direttore')
             $risposta = $utente->ottieniAppuntamentiPeriodoInArray($dataInizio, $numeroGiorni);
@@ -55,6 +60,17 @@ class CGestione
             $risposta = -1;
 
         $Mercurio->invia($risposta);
+    }
+
+    public function spostaDiNGiorni()
+    {
+        $Mercurio = new VGestione();
+        $session = USingleton::getInstance('CSession');
+
+        $data = $session->leggiValore('data');
+        $numeroGiorni = $Mercurio->riceviDurataPeriodo();
+
+        $data->modify($numeroGiorni.' day');
     }
 
     public function segnaEffettuato()
