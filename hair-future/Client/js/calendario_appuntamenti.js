@@ -39,19 +39,13 @@ $(document).ready(function() {
         11: "Dicembre"
     }; //Att! i mesi iniziano da 0 es. novembre=10
 
-    //vedere che giorno è oggi
-    oggi= new Date();
-    // formattare il giorno in base alla classe data di php nel formato Y-m-d
-    dataphp=convertiInDataPhp(oggi);
-
     //dati da inviare al server per conoscere la disponibilità
     var richiesta= {
         controller: "CGestione",
         metodo: "inviaAppuntamenti"
     };
     var dati={
-        numeroGiorni:7,
-        dataInizio: dataphp
+        numeroGiorni:7
     };
 
     //richiesta post che restituirà gli intervalli disponibili
@@ -61,42 +55,54 @@ $(document).ready(function() {
                 dati:dati}),
         function (dati)
         {
-            console.log(dati);
-            inserisciAppuntamenti(dati);
+            $(".result").html(dati);
+            creaTabella(dati);
         },
         "json"
     );
-    testo="";
 
 
-    //Creazione dinamica della prima settimana
-    testo=+testo+'<thead> <tr id="giorni"> <th><span class="glyphicon glyphicon-chevron-left"></span></th>'; //&nbsp;
-
-    // creazione barra in cui sono segnati i giorni a partire da oggi
-    for (i=0;i<7;i++)
+    function creaTabella(appuntamenti)
     {
-        giorno=new Date(oggi.getTime()+86400000*i);
-        testo=testo+'<th width="14%">'+giorni[giorno.getDay()]+'<br>'+giorno.getDate()+' '+mesi[giorno.getMonth()]+'</th>';
-    }
-    testo=testo+'<th><span class="glyphicon glyphicon-chevron-right"></span></th></tr></thead> <tbody id="iniziotabella">';
+        // formattare il giorno che arriva in php nel formato Y-m-d in formato js
+        dataphp=appuntamenti.dataInizio;
+        giornoInizio = convertiInDataJs(dataphp);
 
-    // creazione caselle a cui vengono associati degli id in base alle loro caratteristiche (giorno, ora,...)
-    for (j in orari)
-    {
-        testo=testo+"<tr><td class='colonna'>"+orari[j]+"</td>";
+        ind="indietro";
+        av="avanti";
+
+        testo="";
+
+        //Creazione dinamica della prima settimana
+        testo=+testo+'<thead> <tr id="giorni"> <th><button class="freccia" id="settPrecedente" onClick="sposta(ind)"><span class="glyphicon glyphicon-chevron-left"></span></button></th>'; //&nbsp;
+
+        // creazione barra in cui sono segnati i giorni a partire dal giornoInizio
         for (i=0;i<7;i++)
         {
-            giorno=new Date(oggi.getTime()+86400000*i);
-            //id di una casella: codiceOrario-Giorno-Mese-Anno
-            testo = testo + '<td id="'+j+'-'+giorno.getDate()+'-'+giorno.getMonth()+'-'+giorno.getFullYear()+'" class="orario '+giorno.getDay()+'" rowspan="1"></td>'
+            giorno=new Date(giornoInizio.getTime()+86400000*i);
+            testo=testo+'<th width="14%">'+giorni[giorno.getDay()]+'<br>'+giorno.getDate()+' '+mesi[giorno.getMonth()]+'</th>';
         }
-        testo=testo+"<td class='colonna'>"+orari[j]+"</td>";
-        testo=testo+"</tr>";
+        testo=testo+'<th><button class="freccia" id="settSuccessivo" onClick="sposta(av)"><span class="glyphicon glyphicon-chevron-right"></span></button></th></tr></thead> <tbody id="iniziotabella">';
+
+        // creazione caselle a cui vengono associati degli id in base alle loro caratteristiche (giorno, ora,...)
+        for (j in orari)
+        {
+            testo=testo+"<tr><td class='colonna'>"+orari[j]+"</td>";
+            for (i=0;i<7;i++)
+            {
+                giorno=new Date(giornoInizio.getTime()+86400000*i);
+                //id di una casella: codiceOrario-Giorno-Mese-Anno
+                testo = testo + '<td id="'+j+'-'+giorno.getDate()+'-'+giorno.getMonth()+'-'+giorno.getFullYear()+'" class="orario '+giorno.getDay()+'" rowspan="1" onClick="apriModalEffettuato(this.id)"></td>'
+            }
+            testo=testo+"<td class='colonna'>"+orari[j]+"</td>";
+            testo=testo+"</tr>";
+        }
+
+        testo=testo+ "</tbody>";
+        $('#calendario').append(testo);
+
+        inserisciAppuntamenti(appuntamenti.appuntamenti);
     }
-
-    testo=testo+ "</tbody>";
-    $('#calendario').append(testo);
-
 
     function inserisciAppuntamenti(appuntamenti)
     {
@@ -107,17 +113,18 @@ $(document).ready(function() {
             durata=(appuntamenti[i].durata)/30;
             utente=appuntamenti[i].utente;
             servizi=appuntamenti[i].servizi;
+            effettuato=appuntamenti[i].effettuato;
 
             orario=parseInt(ora.substr(0,2));
             if (ora.substr(3,2)=='30') {orario=orario+"50"}
              else {orario=orario+"00"};
 
             datajs = convertiInDataJs(data);
-
             elem = document.getElementById('' +orario+ '-' + datajs.getDate() + '-' + datajs.getMonth() + '-' + datajs.getFullYear() + '');
             elem.classList.add('has-events');
             elem.id=elem.id+'-'+appuntamenti[i].codice;
             elem.rowSpan = durata;
+            if (effettuato==1) elem.style.backgroundColor = "#009900";
             descrizione = "";
             descrizione = descrizione+'<div class="row-fluid lecture" style="width: 99%; height: 100%;">' +
                     '<span class="title">'+utente.nome+' '+utente.cognome+'</span>'
@@ -138,43 +145,58 @@ $(document).ready(function() {
         }
     }
 
-
-    $(".orario").click(function() {
-        informazioni = getInformazioni(this.id);
-        if($("#"+this.id).is(".has-events")) {
-            $("#myModal").modal();
-            $("#appEffettuato").click(function () {
-                segnaEffettuato(informazioni);
-            })
-        }
-    });
-
-    function segnaEffettuato(informazioni)
-    {
-
-        //dati da inviare al server per conoscere la disponibilità
-        var richiesta1
-            = {
-            controller: "CGestione",
-            metodo: "segnaEffettuato"
-        };
-        var dati1 = {appuntamentoEffettuato: informazioni.appuntamento};
-        $.post
-        (indirizzo,
-            JSON.stringify(
-                {
-                    richiesta: richiesta1,
-                    dati: dati1
-                }),
-            function (risp) {
-                console.log(risp);
-                inserisciAppuntamenti(risp);
-            },
-            "json"
-        );
-    };
-
 });
+
+function apriModalEffettuato(idOrario) {
+
+    if($("#"+idOrario).is(".has-events"))
+    {   informazioni = getInformazioni(idOrario);
+        $("#myModal").modal();
+        $("#appEffettuato").click(function () {
+            segnaEffettuato(informazioni);
+        })
+    }
+}
+
+function segnaEffettuato(informazioni)
+{
+
+    //dati da inviare al server per conoscere la disponibilità
+    var richiesta1
+        = {
+        controller: "CGestione",
+        metodo: "segnaEffettuato"
+    };
+    var dati1 = {appuntamentoEffettuato: informazioni.appuntamento};
+    $.post
+    (indirizzo,
+        JSON.stringify(
+            {
+                richiesta: richiesta1,
+                dati: dati1
+            }),""
+        ,
+        "json"
+    );
+    window.location="calendario_appuntamenti.html";
+}
+
+function sposta(spostamento) {
+    if (spostamento=="avanti") x="7";
+    else x="-7";
+    $.post(indirizzo,
+        JSON.stringify(
+            {
+                richiesta:
+                    {controller: "CGestione",
+                        metodo: "spostaDiNGiorni"},
+                dati: {numeroGiorni: x}
+            }),
+        "",
+        "json"
+    );
+    window.location="calendario_appuntamenti.html";
+}
 
 //funzione che restituisce le informazioni di una casella passandogli l'id
 function getInformazioni(idCasella)
