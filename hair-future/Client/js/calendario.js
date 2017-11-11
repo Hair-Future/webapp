@@ -90,7 +90,7 @@ $(document).ready(function() {
             for (i = 0; i < 7; i++) {
                 giorno = new Date(giornoInizio.getTime() + 86400000 * i);
                 //id di una casella: codiceOrario-Giorno-Mese-Anno
-                testo = testo + '<td id="' + j + '-' + giorno.getDate() + '-' + giorno.getMonth() + '-' + giorno.getFullYear() + '" class="orario ' + giorno.getDay() + '" rowspan="1"></td>'
+                testo = testo + '<td id="' + j + '-' + giorno.getDate() + '-' + giorno.getMonth() + '-' + giorno.getFullYear() + '" class="orario ' + giorno.getDay() + '" rowspan="1" onClick="inviaDati(this.id)"></td>'
             }
             testo = testo + "<td class='colonna'>" + orari[j] + "</td>";
             testo = testo + "</tr>";
@@ -150,51 +150,63 @@ $(document).ready(function() {
     }
 
 
-    $(".orario").click(function() {
-        info=getInformazioni(this.id);
+});
+
+function inviaDati(idOrario) {
+    console.log(idOrario);
+    if($("#"+idOrario).is(".has-events"))
+    {
+        info=getInformazioni(idOrario);
+        toAdd="Vuoi prenotare per il "+info.giorno+" "+mesi[info.mese]+" "+info.anno+" alle "+orari[info.ora]+"?";
+        $('#riepilogo').append(toAdd);
+        $('#modalConferma').modal();
+
+        $("#annulla").click(function(){ window.location="calendario.html"; })
+        $("#close").click(function(){ window.location="calendario.html"; })
+
+        $("#confermaApp").click(function(){
+
         console.log(info);
-        if($("#"+this.id).is(".has-events"))
-        {
-            oraIn = info.ora;
-            giornoApp = info.anno + "-" + (parseInt(info.mese) + 1) + "-" + info.giorno;
-            //dati da inviare al server per salvare la prenotazione
-            var richiesta1 = {
-                controller: "CPrenotazione",
-                metodo: "effettuaPrenotazione"
+
+        oraIn = info.ora;
+        giornoApp = info.anno + "-" + (parseInt(info.mese) + 1) + "-" + info.giorno;
+        //dati da inviare al server per salvare la prenotazione
+        var richiesta1 = {
+            controller: "CPrenotazione",
+            metodo: "effettuaPrenotazione"
+        };
+
+        var dati1 =
+            {
+                oraInizioAppuntamento: orari[oraIn] + ":00",
+                dataAppuntamento: giornoApp
             };
 
-            var dati1 =
+        console.log(dati1);
+
+        $.post(indirizzo,
+            JSON.stringify(
                 {
-                    oraInizioAppuntamento: orari[oraIn] + ":00",
-                    dataAppuntamento: giornoApp
-                };
+                    richiesta: richiesta1,
+                    dati: dati1
+                }),
+            function (risp) {
+                $(".result").html(risp);
+                if (risp == 0) {
+                    alert("Appuntamento prenotato con successo!");
+                    window.location = "index.html";
+                }
+                else {
+                    alert("Ops, si è verificato un errore! Riprova a selezionare un appuntamento");
+                    window.location = "calendario.html";
+                }
 
-            console.log(dati1);
-
-            $.post(indirizzo,
-                JSON.stringify(
-                    {
-                        richiesta: richiesta1,
-                        dati: dati1
-                    }),
-                function (risp) {
-                    $(".result").html(risp);
-                    if (risp == 0) {
-                        alert("Appuntamento prenotato con successo!");
-                        window.location = "index.html";
-                    }
-                    else {
-                        alert("Ops, si è verificato un errore! Riprova a selezionare un appuntamento");
-                        window.location = "calendario.html";
-                    }
-
-                },
-                "json"
-            );
-        }
-    });
-
-});
+            },
+            "json"
+        );
+        })
+    }
+}
 
 function sposta(spostamento) {
     if (spostamento=="avanti") x=7;

@@ -12,7 +12,6 @@
     margin-bottom: 20px;
 }
 
-
 .freccia{
     cursor: pointer;
     margin-bottom: 5px;
@@ -51,7 +50,6 @@ td {
     background-color: rgba(213, 212, 221, 0.8);
     overflow-y: scroll;
 }
-
 
 .force-overflow
 {
