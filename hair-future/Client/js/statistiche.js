@@ -19,7 +19,6 @@ $("#via").click(function()
     finejs=convertiInDataJs(fine);
     oggi= new Date();
 
-
     if(!inizio || !fine) alert ("Attenzione: inserire tutti i campi")
     else{
         if( iniziojs.getTime()>oggi.getTime() || finejs.getTime()>oggi.getTime()) alert("Attenzione: le date devono essere uguali o antecedenti ad oggi");
@@ -43,7 +42,6 @@ $("#via").click(function()
                         }),
                     function (risultato) {
                         $(".result").html(risultato);
-                        console.log(risultato);
                         visualizzaRis(risultato, richiesta.metodo, dati);
                     },
                     "json"
@@ -66,42 +64,40 @@ $("#via").click(function()
             testo=testo+
             '<div class="title">Dal '+dataInizio+' al '+dataFine+' il tuo ricavo è stato di:</div>'+
             '<div class="ris">'+ris+' €</div>';
-        }
-        if (metodo=="serviziApplicati")
-        {
-            /*testo=testo+
-                '<div class="title"> Lista dei servizi applicati dal '+dataInizio+' al '+dataFine+':</div>'+
-                '<div class="ris">';
-            for (i in ris)
-            {   console.log(ris[i].servizio);
-                testo=testo+' <div> '+ris[i].servizio.nome+ ' è stato applicato il '+ris[i].percentuale+'% delle volte</div>'
-            }
             testo=testo+'</div>';
-            */
+            $("#box").append(testo);
+        }
+        else if (metodo=="serviziApplicati" && ris.length > 0)
+        {
+
             testo=testo+'<div class="title"> Lista dei servizi applicati dal '+dataInizio+' al '+dataFine+':</div>'+
                 '<div class="ris"><div id="chartContainer" style="height: 300px; width: 100%;"></div></div>'
+            testo=testo+'</div>';
+            $("#box").append(testo);
+            creaPieChart(ris);
         }
-        if (metodo=="maxSpesaUtente")
+        else if (metodo=="maxSpesaUtente" && ris)
         {
             testo=testo+
                 '<div class="title"> Dal '+dataInizio+' al '+dataFine+" l'utente che ha speso di più è:</div>"+
                 '<div class="ris">'+ris.nome+' '+ris.cognome+' </div>';
+            testo=testo+'</div>';
+            $("#box").append(testo);
         }
-        if (metodo=="appuntamentiMancati")
+        else if (metodo=="appuntamentiMancati" && ris.length > 0)
         {
             testo=testo+
                 '<div class="title"> Lista degli utenti che dal '+dataInizio+' al '+dataFine+' hanno saltato almeno un appuntamento :</div>'+
                 '<div class="ris">';
                     for (i in ris)
                     {
-                        testo=testo+' <div> '+ris[i].utente.nome+ ' '+ris[i].utente.cognome+' è mancato '+ris[i].mancati+' volte</div>'
+                        testo=testo+' <div> '+ris[i].utente.nome+ ' '+ris[i].utente.cognome+': '+ris[i].mancati+'</div>'
                     }
                     testo=testo+'</div>';
+            testo=testo+'</div>';
+            $("#box").append(testo);
         }
-
-        testo=testo+'</div>';
-        $("#box").append(testo);
-        if(metodo=="serviziApplicati") {creaPieChart(ris);}
+        else alert("Non c'è alcun risultato relativo all'intervallo scelto");
 
     }
 
@@ -128,11 +124,10 @@ function creaPieChart(dati) {
 
     percentuali= [];
     for (i in dati)
-    {   console.log(dati[i].servizio);
+    {
         testo=testo+' <div> '+dati[i].servizio.nome+ ' è stato applicato il '+dati[i].percentuale+'% delle volte</div>'
 
         percentuali.push({y: dati[i].percentuale, indexLabel: dati[i].servizio.nome});
-        console.log(percentuali);
     }
 
         var chart = new CanvasJS.Chart("chartContainer",
@@ -145,9 +140,7 @@ function creaPieChart(dati) {
                         toolTipContent: "#percent %",
                         yValueFormatString: "##0.00\"%\"",
                         legendText: "{indexLabel}",
-                        dataPoints:
-                            percentuali
-
+                        dataPoints: percentuali
                     }
                 ]
             });
