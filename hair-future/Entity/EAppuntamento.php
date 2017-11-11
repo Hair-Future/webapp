@@ -238,6 +238,7 @@ class EAppuntamento{
         {
             $dati['servizi'][] = $servizio->convertiInArray();
         }
+        $dati['effettuato'] = $this->effettuato;
         return $dati;
     }
 }
