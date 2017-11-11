@@ -52,6 +52,7 @@ class CGestione
         if ($data == false)
             $data = new DateTime('now');
 
+        $session->impostaValore('data', $data);
         $dataInizio = $data->format('Y-m-d');
 
         if ($utente->getTipo() == 'Direttore')
