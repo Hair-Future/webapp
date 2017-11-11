@@ -14,6 +14,18 @@ require_once 'FrontController.php';
 
 
 // CREAZIONE DEGLI UTENTI NEL DB
+$nuoviUtenti[] = EGestoreUtenti::creaNuovoUtente("Carlo", "Attardi",
+    "3236020450", "carlo@hairfuture.com", "hairfuture", "Direttore");
+$nuoviUtenti[] = EGestoreUtenti::creaNuovoUtente("Lorenza", "Pasquini",
+    "3432424432", "lorenza@hairfuture.com", "hairfuture", "Direttore");
+$nuoviUtenti[] = EGestoreUtenti::creaNuovoUtente("Marco", "Stigliano",
+    "3263263684", "marco@hairfuture.com", "hairfuture", "Direttore");
+
+
+
+
+
+
 $nuoviUtenti[] = EGestoreUtenti::creaNuovoUtente("Carl", "Johnson",
     "3212530891", "cj@sanandreas.com", "grovestreet4life", "Cliente");
 $nuoviUtenti[] = EGestoreUtenti::creaNuovoUtente("Sean", "Johnson",
@@ -24,8 +36,6 @@ $nuoviUtenti[] = EGestoreUtenti::creaNuovoUtente("Lance", "Wilson",
     "3230401151", "ryder@sanandreas.com", "smokeeveryday", "Cliente");
 
 
-$nuoviUtenti[] = EGestoreUtenti::creaNuovoUtente("Reece", "Old",
-    "3236020450", "oldreece@hairfuture.com", "hairfuture", "Direttore");
 
 
 print "Sono stati ineriti nel db i seguenti utenti:\n";
@@ -42,18 +52,28 @@ foreach ($nuoviUtenti as $item) {
 $reece = EGestoreUtenti::ottieniUtenteByID("oldreece@hairfuture.com");
 
 
-$reece->creaCategoria("Capelli","Qui si possono travare i vari tagli di capelli che si trovano dal parrucchiere");
-$reece->creaCategoria("Barba","Qui si possono trovare i vari tagli di barba che si trovano dal barbiere");
+$reece->creaCategoria("Acconciatura","Per ogni occasione");
+$reece->creaCategoria("Piega","Ricci, lisci o semplici");
+$reece->creaCategoria("Taglio","Qui puoi trovare ogni genere di taglio");
+$reece->creaCategoria("Colorazione","Da quella totale alle extension");
 
 
-
-$reece->creaServizio("Afro","I capelli come Jimmy Hendrix", 25, 120, "Capelli");
-$reece->creaServizio("A spazzola","Finalmente un taglio normale", 20, 30, "Capelli");
-$reece->creaServizio("Scalati","Ideale per farsi qualunque acconciatura", 20, 45, "Capelli");
-$reece->creaServizio("Caschetto","Potrai andare in moto tutte le volte che vuoi", 20, 60, "Capelli");
-$reece->creaServizio("Sfoltita", "Meglio del barbiere non lo fa nessuno", 10, 30, "Barba");
-$reece->creaServizio("Pizzetto", "Il migliore taglio di barba", 10, 45, "Barba");
-
+$reece->creaServizio("Raccolta","", 22, 30, "Acconciatura");
+$reece->creaServizio("Mossi lunghi","", 22, 30, "Piega");
+$reece->creaServizio("Taglio normale","", 19, 30, "Taglio");
+$reece->creaServizio("Spuntata","", 15, 30, "Taglio");
+$reece->creaServizio("Taglio frangia", "", 5, 30, "Taglio");
+$reece->creaServizio("Capelli corti", "", 15, 30, "Piega");
+$reece->creaServizio("Capelli lunghi", "", 17, 30, "Piega");
+$reece->creaServizio("Piastra capelli corti", "", 18, 30, "Piega");
+$reece->creaServizio("Piastra capelli lunghi", "", 20, 30, "Piega");
+$reece->creaServizio("Mossi corti", "", 20, 30, "Piega");
+$reece->creaServizio("Treccia semplice", "", 20, 30, "Acconciatura");
+$reece->creaServizio("Treccia attaccata", "", 25, 30, "Acconciatura");
+$reece->creaServizio("Da sposa", "", 130, 90, "Acconciatura");
+$reece->creaServizio("A pigmenti", "Dura alcuni lavaggi", 14, 30, "Colorazione");
+$reece->creaServizio("Permanente", "Dura a lungo", 36, 60, "Colorazione");
+$reece->creaServizio("Extension", "", 25, 60, "Colorazione");
 
 
 
