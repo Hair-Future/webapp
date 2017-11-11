@@ -14,7 +14,10 @@
 
 
 .freccia{
-    cursor: pointer;}
+    cursor: pointer;
+    margin-bottom: 5px;
+    border: none;
+    background-color: #a824e2;}
 
 #giorni{
     background-color: rgba(163, 17, 227, 0.9);
