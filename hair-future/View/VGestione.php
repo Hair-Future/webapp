@@ -48,4 +48,11 @@ class VGestione extends VJson
         $dati = $this->ricevi();
         return $dati['dati']['appuntamentoEffettuato'];
     }
+
+    public function inviaAppuntamentiData($appuntamenti, $dataInizio)
+    {
+        $data['appuntamenti'] = $appuntamenti;
+        $data['dataInizio'] = $dataInizio;
+        parent::invia($data);
+    }
 }

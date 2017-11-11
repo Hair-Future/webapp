@@ -55,11 +55,11 @@ class CGestione
         $dataInizio = $data->format('Y-m-d');
 
         if ($utente->getTipo() == 'Direttore')
-            $risposta = $utente->ottieniAppuntamentiPeriodoInArray($dataInizio, $numeroGiorni);
+            $appuntamenti= $utente->ottieniAppuntamentiPeriodoInArray($dataInizio, $numeroGiorni);
         else
-            $risposta = -1;
+            $appunatmenti= -1;
 
-        $Mercurio->invia($risposta);
+        $Mercurio->inviaAppuntamentiData($appuntamenti, $dataInizio);
     }
 
     public function spostaDiNGiorni()
