@@ -60,7 +60,8 @@ class CPrenotazione
         $numeroGiorni = $Mercurio->riceviNumeroGiorni();
 
         $date->modify($numeroGiorni.' day');
-        if (strtotime($data->format('Y-m-d')) > strtotime(date('Y-m-d')))
+
+        if (strtotime($date->format('Y-m-d')) >= strtotime(date('Y-m-d')))
             $session->impostaValore('data', $date->format('Y-m-d'));
 
     }

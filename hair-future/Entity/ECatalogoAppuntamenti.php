@@ -373,14 +373,14 @@ class ECatalogoAppuntamenti
         $intervalli = $this->ottieniIntervalliPrenotabiliMattinaOppurePomeriggio($date->format('Y-m-d'), $durataAppuntamento, 'Mattina');
         foreach ($intervalli as $intervallo)
         {
-            if (strtotime($intervallo) > time())
+            if (strtotime($data." ".$intervallo) > time())
                 $prenotabili[$date->format('Y-m-d')][] = $intervallo;
         }
 
         $intervalli = $this->ottieniIntervalliPrenotabiliMattinaOppurePomeriggio($date->format('Y-m-d'), $durataAppuntamento, 'Pomeriggio');
         foreach ($intervalli as $intervallo)
         {
-            if (strtotime($intervallo) > time())
+            if (strtotime($data." ".$intervallo) > time())
                 $prenotabili[$date->format('Y-m-d')][] = $intervallo;
         }
         $date->modify('+1 day');

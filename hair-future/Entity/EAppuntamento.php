@@ -217,7 +217,7 @@ class EAppuntamento{
         if (strtotime($this->data) <= strtotime(date("Y-m-d")))
         {
             $Caronte = new FAppuntamento();
-            return $Caronte->done($this->codice);
+            return $Caronte->done((int)$this->codice);
         }
         else
         {
