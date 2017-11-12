@@ -66,8 +66,9 @@ $(document).ready(function() {
         testo = testo + '</tr>';
         testo = testo + '<tr>';
         for (i in giorni) {
-            day=giorni[i];
-            ore=dati[day];
+            //day=giorni[i];
+            //ore=dati[day];
+            ore=dati[i];
 
             testo = testo + '<td>' +
                 '<div class="bigger">Pomeriggio</div>' +
@@ -139,7 +140,7 @@ $(document).ready(function() {
         for (i in giorni)
         {
             day= {
-                    giorno: giorni[i],
+                    giorno: i,
                     aperturaMattina: $("#"+i+"-matt-dalle").val()+":00",
                     chiusuraMattina: $("#"+i+"-matt-alle").val()+":00",
                     aperturaPomeriggio: $("#"+i+"-pom-dalle").val()+":00",
