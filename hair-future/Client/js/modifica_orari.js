@@ -24,13 +24,13 @@ $(document).ready(function() {
         "json");
 
     giorni={
-        lun: "Lunedì",
-        mar: "Martedì",
-        mer: "Mercoledì",
-        gio: "Giovedì",
-        ven: "Venerdì",
-        sab: "Sabato",
-        dom: "Domenica"
+        lun: "lun",
+        mar: "mar",
+        mer: "mer",
+        gio: "gio",
+        ven: "ven",
+        sab: "sab",
+        dom: "dom"
     };
 
     orari={
