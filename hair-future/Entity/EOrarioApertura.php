@@ -90,8 +90,8 @@ class EOrarioApertura
      */
     public function getGiorno($data)
     {
-        $settimanaEngIta = array('Mon'=>'Lunedì','Tue'=>'Martedì','Wed'=>'Mercoledì',
-            'Thu'=>'Giovedì','Fri'=>'Venerdì','Sat'=>'Sabato','Sun'=>'Domenica');
+        $settimanaEngIta = array('Mon'=>'lun','Tue'=>'mar','Wed'=>'mer',
+            'Thu'=>'gio','Fri'=>'ven','Sat'=>'sab','Sun'=>'dom');
         $dayWeek = date('D', strtotime($data));
         return $this->listaGiorni[$settimanaEngIta[$dayWeek]];
     }

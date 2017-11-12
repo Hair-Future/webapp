@@ -15,6 +15,7 @@ class CSession
         ini_set('session.cookie_lifetime', '1800');
         ini_set('session.gc_maxlifetime', '1800');
         ini_set('session.cookie_httponly', 'true');
+        $this->Session();
     }
 
     public function __destroy()

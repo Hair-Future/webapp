@@ -28,7 +28,7 @@ class CPrenotazione
         $lista = $catalogoServizi->ottieniListaServiziByCodici($listaCodici);
         $data = new DateTime("now");
 
-        $session->impostaValore('data', $data);
+        $session->impostaValore('data', $data->format('Y-m-d'));
         $session->impostaValore('durataListaServiziAttuale', $durata);
         $session->impostaValore('listaServiziAttuale', $lista);
     }
@@ -44,10 +44,10 @@ class CPrenotazione
         $cliente = $session->leggiValore('utente');
 
         $durata = $session->leggiValore('durataListaServiziAttuale');
-        $intervalli = $cliente->ottieniIntervalliPrenotabili($data->format('Y-m-d'),
+        $intervalli = $cliente->ottieniIntervalliPrenotabili($data,
             $numeroGiorni, $durata);
 
-        $Mercurio->inviaDatiCalendario($data->format('Y-m-d'), $durata, $intervalli);
+        $Mercurio->inviaDatiCalendario($data, $durata, $intervalli);
     }
 
     public function spostaDiNGiorni()
@@ -56,11 +56,12 @@ class CPrenotazione
         $session = USingleton::getInstance('CSession');
 
         $data = $session->leggiValore('data');
+        $date = new DateTime($data);
         $numeroGiorni = $Mercurio->riceviNumeroGiorni();
 
-        $data->modify($numeroGiorni.' day');
-        if (strtotime($data->format('Y-m-d')) < strtotime(date('Y-m-d')))
-            $session->impostaValore('data', new DateTime('now'));
+        $date->modify($numeroGiorni.' day');
+        if (strtotime($data->format('Y-m-d')) > strtotime(date('Y-m-d')))
+            $session->impostaValore('data', $date->format('Y-m-d'));
 
     }
 

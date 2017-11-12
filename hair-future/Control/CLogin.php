@@ -18,7 +18,6 @@ class CLogin
         $email = $Mercurio->ottieniEmail();
 
         $sessione = USingleton::getInstance('CSession');
-        $sessione->Session();
 
         $utente = EGestoreUtenti::autenticaUtente($email, $password);
         $sessione->impostaValore('utente', $utente);

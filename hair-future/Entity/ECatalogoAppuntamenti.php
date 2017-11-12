@@ -54,9 +54,9 @@ class ECatalogoAppuntamenti
             $oraFineTemp = strtotime($data." ".$appuntamento->getOraFine());
 
             if (((($startTime <= $oraInizioTemp) && ($endTime >= $oraFineTemp)) ||
-                (($startTime < $oraInizioTemp) && (($endTime <= $oraFineTemp) && ($endTime > $oraInizioTemp))) ||
+                (($startTime <= $oraInizioTemp) && (($endTime <= $oraFineTemp) && ($endTime > $oraInizioTemp))) ||
                 ((($startTime >= $oraInizioTemp) && ($startTime < $oraFineTemp)) && ($endTime >= $oraFineTemp)) ||
-                (($startTime > $oraInizioTemp) && ($endTime < $oraFineTemp))))
+                (($startTime >= $oraInizioTemp) && ($endTime < $oraFineTemp))))
             {
                 return -1;
             }
@@ -273,7 +273,10 @@ class ECatalogoAppuntamenti
             {
                 foreach ($giorno as $appuntamento)
                 {
-                    $appuntamenti[] = $appuntamento;
+                    if(isset($appuntamento))
+                    {
+                        $appuntamenti[] = $appuntamento;
+                    }
                 }
             }
             $date->modify('+1 day');
@@ -307,8 +310,11 @@ class ECatalogoAppuntamenti
         $intervalli = array();
         foreach ($appuntamenti as $item)
         {
-            $intervalli[$item->getData()][] = array('inizioIntervallo' => $item->getOraInizio(),
-            'fineIntervallo' => $item->getOraFine());
+            if (isset($item))
+            {
+                $intervalli[$item->getData()][] = array('inizioIntervallo' => $item->getOraInizio(),
+                    'fineIntervallo' => $item->getOraFine());
+            }
         }
         return $intervalli;
     }
@@ -328,7 +334,7 @@ class ECatalogoAppuntamenti
             {
                 if (strtotime($intervallo["inizioIntervallo"]) >= strtotime($fineIntervalloPrec))
                 {
-                    if (strtotime($intervallo["inizioIntervallo"]) < strtotime($giorno->{"getChiusura".$mattinaPomeriggio}()))
+                    if ((strtotime($intervallo["inizioIntervallo"]) <= strtotime($giorno->{"getChiusura".$mattinaPomeriggio}())) && ($durata > 0))
                     {
                         $libero = strtotime($intervallo["inizioIntervallo"]) - strtotime($fineIntervalloPrec);
                         $numIntervalli = floor($libero/$durata);
@@ -347,13 +353,13 @@ class ECatalogoAppuntamenti
         {
             $libero = strtotime($giorno->{"getChiusura".$mattinaPomeriggio}()) - strtotime($fineIntervalloPrec);
             if ($durata > 0)
-                $numIntervalli = floor($libero/$durata);
-            else
-                return -1;
-            for ($i = 0; $i<$numIntervalli; $i++)
             {
-                $prenotabili[] = $fineIntervalloPrec;
-                $fineIntervalloPrec = date('H:i:s', strtotime('+'.$durataAppuntamento.' min', strtotime($fineIntervalloPrec)));
+                $numIntervalli = floor($libero/$durata);
+                for ($i = 0; $i<$numIntervalli; $i++)
+                {
+                    $prenotabili[] = $fineIntervalloPrec;
+                    $fineIntervalloPrec = date('H:i:s', strtotime('+'.$durataAppuntamento.' min', strtotime($fineIntervalloPrec)));
+                }
             }
         }
         return $prenotabili;
