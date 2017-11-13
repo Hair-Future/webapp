@@ -58,6 +58,8 @@ $("#via").click(function()
 
         dataInizio=x[2]+"-"+x[1]+"-"+x[0];
         dataFine=y[2]+"-"+y[1]+"-"+y[0];
+        console.log(ris);
+        console.log(ris.length);
         testo='<div id="risultato" class="col-sm-5 sfondo_grigio">';
         if (metodo=="guadagno")
         {
@@ -84,7 +86,7 @@ $("#via").click(function()
             testo=testo+'</div>';
             $("#box").append(testo);
         }
-        else if (metodo=="appuntamentiMancati" && ris.length > 0)
+        else if (metodo=="appuntamentiMancati" && ris.length!=0)
         {
             testo=testo+
                 '<div class="title"> Lista degli utenti che dal '+dataInizio+' al '+dataFine+' hanno saltato almeno un appuntamento :</div>'+
