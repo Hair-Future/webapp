@@ -50,7 +50,7 @@ class CGestione
         $utente = $session->leggiValore('utente');
         $data = $session->leggiValore('data');
         if ($data == false)
-            $data = new DateTime('now');
+                $data = new DateTime('now');
 
         $session->impostaValore('data', $data);
         $dataInizio = $data->format('Y-m-d');
@@ -79,12 +79,12 @@ class CGestione
         $Mercurio = new VGestione();
         $session = USingleton::getInstance('CSession');
         $utente = $session->leggiValore('utente');
-        $effettuati = $Mercurio->riceviEffettuati();
+        $effettuato = $Mercurio->riceviEffettuati();
         if ($utente->getTipo() == 'Direttore')
-            $check = $utente->segnaAppuntamentoEffettuato($effettuati);
+            $check = $utente->segnaAppuntamentoEffettuato($effettuato);
         else
             $check = -1;
 
-        $Mercurio->invia($check);
+        $Mercurio->invia(array($check));
     }
 }

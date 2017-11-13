@@ -26,13 +26,13 @@ class FAppuntamento extends FDb{
      * @param string $codice
      * @return array
      */
-    public function search($data, $ora)
+    public function search($data)
     {
         $this->sql = $this->con->prepare("SELECT *
                       FROM Appuntamento
-                      WHERE data >= ? AND ora >= ?
+                      WHERE data >= ?
                       ORDER BY `Appuntamento`.`ora` ASC;");
-        return parent::search(array($data, $ora));
+        return parent::search(array($data));
     }
 
     public function searchByPeriodo($values)
@@ -42,6 +42,15 @@ class FAppuntamento extends FDb{
                       WHERE data >= ? and data <= ?
                       ORDER BY `Appuntamento`.`ora` ASC;");
         return parent::search($values);
+    }
+
+    public function searchByCodice($id)
+    {
+        $this->sql = $this->con->prepare("SELECT *
+                      FROM Appuntamento
+                      WHERE codice = ?
+                      ORDER BY `Appuntamento`.`ora` ASC;");
+        return parent::searchById(array($id));
     }
 
     /**
@@ -72,7 +81,7 @@ class FAppuntamento extends FDb{
     public function done($id)
     {
         $this->sql = $this->con->prepare("UPDATE Appuntamento
-                     SET effettuato = TRUE 
+                     SET effettuato = 1 
                      WHERE codice = ?;");
         return parent::query(array($id));
     }

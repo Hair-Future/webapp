@@ -25,12 +25,12 @@ class CPrenotazione
         $listaCodici = $Mercurio->riceviListaCodiciServizi();
 
         $durata = $catalogoServizi->getDurataListaServizi($listaCodici);
-        $lista = $catalogoServizi->ottieniListaServiziByCodici($listaCodici);
+        //$lista = $catalogoServizi->ottieniListaServiziByCodici($listaCodici);
         $data = new DateTime("now");
 
         $session->impostaValore('data', $data->format('Y-m-d'));
         $session->impostaValore('durataListaServiziAttuale', $durata);
-        $session->impostaValore('listaServiziAttuale', $lista);
+        $session->impostaValore('listaServiziAttuale', $catalogoServizi->ottieniListaServiziByCodici($listaCodici));
     }
 
     public function inviaDatiCalendario()

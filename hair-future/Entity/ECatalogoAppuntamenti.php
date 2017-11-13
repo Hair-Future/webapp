@@ -10,10 +10,18 @@ class ECatalogoAppuntamenti
 {
     private $catalogo = [];
 
-    private function carica()
+    private function carica($data = null, $numGiorni = 7)
     {
+        if ($data == null)
+            $dataInizio = new DateTime();
+        else
+            $dataInizio = new DateTime($data);
+
+        $dataFine = new DateTime($dataInizio->format('Y-m-d')." +".$numGiorni." days");
+
+
         $db = new FAppuntamento();
-        $result = $db->search("CURRENT_DATE", "CURRENT_TIME");
+        $result = $db->searchByPeriodo(array($dataInizio->format('Y-m-d'), $dataFine->format('Y-m-d')));
         $this->catalogo = [];
         foreach ($result as $row)
         {
@@ -126,13 +134,14 @@ class ECatalogoAppuntamenti
      */
 
 
-    public function searchAppuntamentoByUtente($utente){
-        $result = array();
-        foreach ($this->catalogo as $appuntamento){
-            if($appuntamento->getUtente()->getEmail() == $utente)
-                $result[] = $appuntamento;
+    public function searchAppuntamentoByUtente($id, $utente){
+        $result = $this->searchAppuntamentoByCodice($id);
+        if ($result->getUtente()->getEmail() == $utente)
+        {
+            return $result;
         }
-        return $result;
+        else
+            return -1;
     }
 
 
@@ -141,12 +150,7 @@ class ECatalogoAppuntamenti
      * metodo che restituisce tutti gli appuntamenti della data corrente
      */
     public function searchAppuntamentoOdierno(){
-        $result = array();
-        foreach ($this->catalogo as $appuntamento) {
-            if($appuntamento->getData() == date('Y-m-d'))
-                $result[] = $appuntamento;
-        }
-        return $result;
+        return $this->searchAppuntamentoByData(date('Y-m-d'));
     }
 
     /**
@@ -156,6 +160,7 @@ class ECatalogoAppuntamenti
      */
     public function searchAppuntamentoByData($data){
         $result = array();
+        $this->carica($data);
         foreach ($this->catalogo as $appuntamento){
             if($appuntamento->getData() == $data)
                 $result[] = $appuntamento;
@@ -188,11 +193,13 @@ class ECatalogoAppuntamenti
      * metodo che riceve un codice di un appuntamento e lo restituisce, se esiste
      */
     public function searchAppuntamentoByCodice($codice){
-        foreach ($this->catalogo as $appuntamento){
-            if($appuntamento->getCodice() == $codice)
-                return $appuntamento;
-        }
-        return false;
+        $Caronte = new FAppuntamento();
+        $result = $Caronte->searchByCodice($codice);
+
+        $appuntamento = new EAppuntamento();
+        $appuntamento->loadByValori($result);
+
+        return $appuntamento;
     }
 
     /**
@@ -217,7 +224,6 @@ class ECatalogoAppuntamenti
             $appuntamento->sceltaServizi($email, $listaServizi);
             $appuntamento->addAppuntamento($data, $ora);
             FAppuntamento::unlock();
-            $this->carica();
             return 0;
         }
         else
@@ -229,32 +235,15 @@ class ECatalogoAppuntamenti
 
     public function modificaAppuntamento($id, $data, $ora, $email)
     {
-        $appuntamenti = $this->searchAppuntamentoByUtente($email);
-        foreach ($appuntamenti as $appuntamento)
-        {
-            if ($appuntamento->getCodice() == $id)
-            {
-                $appuntamento->updateAppuntamento($data, $ora);
-                $this->carica();
-                return 0;
-            }
-        }
-        return -1;
+        $appuntamento = $this->searchAppuntamentoByUtente($id, $email);
+        $appuntamento->updateAppuntamento($data, $ora);
     }
 
     public function cancellaAppuntamento($id, $email)
     {
-        $appuntamenti = $this->searchAppuntamentoByUtente($email);
-        foreach ($appuntamenti as $appuntamento)
-        {
-            if ($appuntamento->getCodice() == $id)
-            {
-                $appuntamento->deleteAppuntamento();
-                $this->carica();
-                return 0;
-            }
-        }
-        return -1;
+        $appuntamento = $this->searchAppuntamentoByUtente($id, $email);
+        $appuntamento->deleteAppuntamento();
+
     }
 
     /**
@@ -268,7 +257,7 @@ class ECatalogoAppuntamenti
         $date = new DateTime($dataInizio);
         for ($i = 0; $i < $numGiorni; $i++)
         {
-            $giorno = $this->searchAppuntamentoByData($date->format('Y-m-d'));
+            $giorno = $this->searchAppuntamentoByPeriodo($date->format('Y-m-d'), $date->format('Y-m-d'));
             if (($giorno))
             {
                 foreach ($giorno as $appuntamento)
